@@ -50,12 +50,12 @@ def expandChildren(node, matrix):
 
 
 def run(data: DataInput) -> AlgorithmResult:
+    # init variables and add first node to queue
     queue = PriorityQueue()
     visited = set()
-    min_depth = 0
-    penertraion = 0  # TODO: what is this??
-    EBF = 0  # TODO: what is this?
-    avg_depth = 0  # TODO: where do we update this?
+    min_depth = data.matrix_size ** 2
+    max_depth = 0
+    total_depth = 0
     start_node = Node(data.start_point, data.matrix[data.start_point.x][data.start_point.y])
     goal_node = Node()
     queue.insert(start_node, 0)
@@ -66,8 +66,15 @@ def run(data: DataInput) -> AlgorithmResult:
         if current_node.coordinates == data.end_point:
             goal_node = current_node
             break
+
+        if current_node.depth > max_depth:
+            max_depth = current_node.depth
+        total_depth += current_node.depth
+
         visited.add(current_node.coordinates)
         nodes_to_enqueue = expandChildren(current_node, data.matrix)
+
+        # check for min depth when the search path is "stuck"
         if len(nodes_to_enqueue) == 0:
             min_depth = current_node.depth
         else:
@@ -76,12 +83,14 @@ def run(data: DataInput) -> AlgorithmResult:
                     queue.insert(node, node.cost_of_path)
 
     total_expanded_nodes = len(visited)
-    max_depth = goal_node.depth
+    avg_depth = total_depth / total_expanded_nodes
+    # TODO: how do you correctly calculate min depth in UCS?
+    min_depth = max_depth if min_depth == data.matrix_size ** 2 else max_depth
 
     if goal_node.cost > 0:
-        return AlgorithmResult(goal_node.path_to_node[:-1], goal_node.cost_of_path, total_expanded_nodes, penertraion,
+        return AlgorithmResult(goal_node.path_to_node[:-1], goal_node.cost_of_path, total_expanded_nodes, 0,
                                True,
-                               EBF, 0, min_depth, max_depth, avg_depth)
+                               0, 0, min_depth, max_depth, avg_depth)
     else:
         return AlgorithmResult("", 0, total_expanded_nodes, 0, False, 0, 0, min_depth, max_depth, avg_depth)
 

@@ -60,9 +60,18 @@ class AlgorithmResult:
         self.final_path = final_path
 
     def __str__(self):
-        return f'final path: {self.final_path} \n' \
+        if self.successful:
+            return f'final path: {self.final_path} \n' \
                f'final cost: {self.path_cost} \n' \
-               f'nodes expanded: {self.nodes_expanded}'
+               f'nodes expanded: {self.nodes_expanded} \n' \
+               f'max depth: {self.max_depth} \n' \
+               f'min depth: {self.min_depth} \n' \
+               f'***FOR INFORMED SEARCHES: \n' \
+               f'EBF: {self.EBF} \n' \
+               f'avg H: {self.avg_H} \n' \
+               f'penetration: {self.penetration}'
+        else:
+            return 'Algorithm Failed!'
 
 
 class Node:

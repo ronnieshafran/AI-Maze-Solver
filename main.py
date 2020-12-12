@@ -16,13 +16,9 @@ def parseInputFile(filePath: str) -> DataInput:
 
 if __name__ == '__main__':
     di = parseInputFile(r'C:\Users\ronni\PycharmProjects\AIFinalProject\t.txt')
-    print('Hello')
-
     if di.selected_algorithm == "UCS":
         import UCS
         res = UCS.run(di)
         print(res)
     else:
         raise Exception("something crashed :(")
-
-    # todo print res
