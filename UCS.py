@@ -2,7 +2,7 @@ from dataStructures import *
 from numpy import ndarray
 
 
-def getNodeInDirection(parent_node: Node, direction: str, matrix: ndarray) -> Node:
+def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray) -> Node:
     next_node_point = None
     next_node_value = None
     try:
@@ -39,11 +39,11 @@ def getNodeInDirection(parent_node: Node, direction: str, matrix: ndarray) -> No
         return Node()
 
 
-def expandChildren(node, matrix):
+def expand_children(node, matrix):
     children = []
     directions = ("RU", "R", "RD", "D", "LD", "L", "LU", "U")
     for direction in directions:
-        current_node = getNodeInDirection(node, direction, matrix)
+        current_node = get_node_in_direction(node, direction, matrix)
         if current_node.cost > 0:
             children.append(current_node)
     return children
@@ -72,7 +72,7 @@ def run(data: DataInput) -> AlgorithmResult:
         total_depth += current_node.depth
 
         visited.add(current_node.coordinates)
-        nodes_to_enqueue = expandChildren(current_node, data.matrix)
+        nodes_to_enqueue = expand_children(current_node, data.matrix)
 
         # check for min depth when the search path is "stuck"
         if len(nodes_to_enqueue) == 0:
