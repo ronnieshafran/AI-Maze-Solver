@@ -4,10 +4,11 @@ from UCS import get_children
 
 
 def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> AlgorithmResult:
+    # DLS without duplicates - every node enters the stack at most once
     stack = LifoQueue()
     observed_points_set = set()  # meant to avoid observing the same node twice if two nodes led to it
     total_expanded_nodes = 0
-    min_depth = matrix_size-1
+    min_depth = matrix_size - 1
     max_depth = 0
     total_depth = 0
     start_node = Node(start_point, matrix[start_point.x][start_point.y])
@@ -38,11 +39,7 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> AlgorithmR
                 stack.put(child_node)
                 observed_points_set.add(child_node.coordinates)
 
-        # for child_node in children_nodes:
-        #     if child_node.coordinates not in observed_points_set:
-        #         stack.put(child_node)
-
-    avg_depth = total_depth/total_expanded_nodes
+    avg_depth = total_depth / total_expanded_nodes
     if goal_node is not None:
         return AlgorithmResult(goal_node.path_to_node[:-1], goal_node.cost_of_path, total_expanded_nodes, 0, True, 0, 0,
                                min_depth, max_depth, avg_depth)
@@ -52,7 +49,7 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> AlgorithmR
 
 def run(data: DataInput) -> AlgorithmResult:
     current_search = None
-    for depth in range(data.matrix_size):
+    for depth in range(data.matrix_size ** 2): # depth cannot possibly exceed n^2
         current_search = DLS(data.matrix, data.matrix_size, data.start_point, data.end_point, depth)
         if current_search.successful:
             break
