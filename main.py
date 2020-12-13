@@ -21,4 +21,4 @@ if __name__ == '__main__':
         res = UCS.run(di)
         print(res)
     else:
-        raise Exception("something crashed :(")
+        raise Exception("something went wrong :(")
