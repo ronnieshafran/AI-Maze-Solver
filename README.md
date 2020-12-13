@@ -1,4 +1,4 @@
-# AIFinalProject
+# AI Final Project
 Final project of AI course in the University Of Haifa by Shir Avneri and Ronnie Shafran.
 
 In the project, we had to implement 5 search algorithms: UCS, IDS, A*, Bi directional A* and IDA* 
