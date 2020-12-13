@@ -39,7 +39,7 @@ def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray) ->
         return Node()
 
 
-def expand_children(node, matrix):
+def get_children(node, matrix):
     children = []
     directions = ("RU", "R", "RD", "D", "LD", "L", "LU", "U")
     for direction in directions:
@@ -72,7 +72,7 @@ def run(data: DataInput) -> AlgorithmResult:
         total_depth += current_node.depth
 
         visited.add(current_node.coordinates)
-        nodes_to_enqueue = expand_children(current_node, data.matrix)
+        nodes_to_enqueue = get_children(current_node, data.matrix)
 
         # check for min depth when the search path is "stuck"
         if len(nodes_to_enqueue) == 0:

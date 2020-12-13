@@ -15,10 +15,14 @@ def parse_input_file(file_path: str) -> DataInput:
 
 
 if __name__ == '__main__':
-    di = parse_input_file(r'C:\Users\ronni\PycharmProjects\AIFinalProject\t.txt')
+    di = parse_input_file(r'C:\Users\ronni\PycharmProjects\AIFinalProject\medium_test.txt')
     if di.selected_algorithm == "UCS":
         import UCS
         res = UCS.run(di)
+        print(res)
+    elif di.selected_algorithm == "IDS":
+        import IDS
+        res = IDS.run(di)
         print(res)
     else:
         raise Exception("something went wrong :(")
