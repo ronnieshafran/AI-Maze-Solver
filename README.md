@@ -11,6 +11,6 @@ are none-negative).
 
 Output:
 A series of statistics defined in the AlgorithmResult data structure that is returned by each algorithm's
-run method. Note that some stats are only applicable for informed searches only.
+run method. Note that some stats are only applicable for informed searches.
 
 
