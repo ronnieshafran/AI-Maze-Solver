@@ -15,7 +15,7 @@ def parse_input_file(file_path: str) -> DataInput:
 
 
 if __name__ == '__main__':
-    di = parse_input_file(r'C:\Users\ronni\PycharmProjects\AIFinalProject\medium_test.txt')
+    di = parse_input_file(r'C:\Users\ronni\PycharmProjects\AIFinalProject\small_test.txt')
     if di.selected_algorithm == "UCS":
         import UCS
         res = UCS.run(di)

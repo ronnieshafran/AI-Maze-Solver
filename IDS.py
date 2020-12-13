@@ -14,7 +14,7 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> AlgorithmR
     goal_node = None
 
     stack.put(start_node)
-    observed_points_set.add(start_node)
+    observed_points_set.add(start_node.coordinates)
     while not stack.empty():
         current_node = stack.get()
 
@@ -30,12 +30,13 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> AlgorithmR
 
         children_nodes = get_children(current_node, matrix)
         children_nodes_to_put_in_stack = [child_node for child_node in children_nodes
-                                          if child_node not in observed_points_set]
+                                          if child_node.coordinates not in observed_points_set]
         if len(children_nodes_to_put_in_stack) == 0:
             min_depth = current_node.depth if current_node.depth < min_depth else min_depth
         else:
             for child_node in children_nodes_to_put_in_stack:
                 stack.put(child_node)
+                observed_points_set.add(child_node.coordinates)
 
         # for child_node in children_nodes:
         #     if child_node.coordinates not in observed_points_set:
@@ -50,7 +51,6 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> AlgorithmR
 
 
 def run(data: DataInput) -> AlgorithmResult:
-    success = False
     current_search = None
     for depth in range(data.matrix_size):
         current_search = DLS(data.matrix, data.matrix_size, data.start_point, data.end_point, depth)
