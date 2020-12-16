@@ -75,9 +75,13 @@ class AlgorithmResult:
 
 
 class Node:
-    def __init__(self, coordinates=Point([0, 0]), cost=-1, path_to_node='', depth=0, cost_of_path=0):
+    def __init__(self, coordinates=Point([0, 0]), cost=-1, path_to_node='', depth=0, cost_of_path=0, heuristic_value=0, g_cost_of_path = 0):
+        self.g_cost_of_path = g_cost_of_path
+        self.heuristic_value = heuristic_value
         self.path_to_node = path_to_node
         self.depth = depth
         self.cost = cost
         self.coordinates = coordinates
-        self.cost_of_path = cost_of_path
+        self.f_cost_of_path = cost_of_path
+
+

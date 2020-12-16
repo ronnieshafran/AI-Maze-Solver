@@ -2,6 +2,7 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from dataStructures import DataInput, Point
 import numpy
+import Heuristics
 
 
 def parse_input_file(file_path: str) -> DataInput:
@@ -14,15 +15,23 @@ def parse_input_file(file_path: str) -> DataInput:
         return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix)
 
 
+# TODO: general TODOs: calc run time, refactor data structures to different files (?), find better name for UCS/A* common function
 if __name__ == '__main__':
-    di = parse_input_file(r'C:\Users\ronni\PycharmProjects\AIFinalProject\small_test.txt')
+    di = parse_input_file(r'C:\Users\ronni\PycharmProjects\AIFinalProject\medium_test.txt')
     if di.selected_algorithm == "UCS":
         import UCS
-        res = UCS.run(di)
+
+        res = UCS.run(di, Heuristics.zero_heuristic)
         print(res)
     elif di.selected_algorithm == "IDS":
         import IDS
+
         res = IDS.run(di)
+        print(res)
+    elif di.selected_algorithm == "ASTAR":
+        import UCS
+
+        res = UCS.run(di, Heuristics.euclidean_distance)
         print(res)
     else:
         raise Exception("something went wrong :(")
