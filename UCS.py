@@ -35,15 +35,16 @@ def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray, h_
         if next_node_coordinates.x < 0 or next_node_coordinates.y < 0 or next_node_value < 0:
             return Node()
         next_node_h_value = h_function(next_node_coordinates, end_point)
-        return Node(coordinates=next_node_coordinates, cost=next_node_value,path_to_node=parent_node.path_to_node + f'{direction}-',
-                    depth= parent_node.depth +1,g_cost_of_path=parent_node.g_cost_of_path + next_node_value, heuristic_value=next_node_h_value)
-            # next_node_coordinates, next_node_value, parent_node.path_to_node + f'{direction}-',
-            #         parent_node.depth + 1, parent_node.f_cost_of_path + next_node_value + next_node_h_value, next_node_h_value
+        return Node(coordinates=next_node_coordinates, cost=next_node_value, path_to_node=parent_node.path_to_node + f'{direction}-',
+                    depth=parent_node.depth + 1, g_cost_of_path=parent_node.g_cost_of_path + next_node_value,
+                    heuristic_value=next_node_h_value, f_cost_of_path=parent_node.g_cost_of_path + next_node_value + next_node_h_value)
+        # next_node_coordinates, next_node_value, parent_node.path_to_node + f'{direction}-',
+        #         parent_node.depth + 1, parent_node.f_cost_of_path + next_node_value + next_node_h_value, next_node_h_value
     except:
         return Node()
 
 
-def get_children(node, matrix, h_function = zero_heuristic, end_point = Point([0,0])):
+def get_children(node, matrix, h_function=zero_heuristic, end_point=Point([0, 0])):
     children = []
     directions = ("RU", "R", "RD", "D", "LD", "L", "LU", "U")
     for direction in directions:
@@ -57,17 +58,20 @@ def get_children(node, matrix, h_function = zero_heuristic, end_point = Point([0
 
 def run(data: DataInput, h_function) -> AlgorithmResult:
     # init variables and add first node to queue
-    queue = PriorityQueue()
+    open_list_queue = PriorityQueue()
+    open_list_dict = {}
     visited = {}
     min_depth = data.matrix_size ** 2
     max_depth = 0
     total_depth = 0
     start_node = Node(data.start_point, data.matrix[data.start_point.x][data.start_point.y])
     goal_node = Node()
-    queue.insert(start_node, 0)
+    open_list_queue.insert(start_node, 0)
+    open_list_dict |= {start_node.coordinates: 0}
 
-    while not queue.is_empty():
-        current_node = queue.remove()
+    while not open_list_queue.is_empty():
+        current_node = open_list_queue.remove()
+
         if current_node.coordinates == data.end_point:
             goal_node = current_node
             break
@@ -85,10 +89,11 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
         else:
             for node in nodes_to_enqueue:
                 if node.coordinates not in visited:
-                    queue.insert(node, node.f_cost_of_path)
+                    open_list_queue.insert(node, node.f_cost_of_path)
+
                 elif node.f_cost_of_path < visited.get(node.coordinates):
                     visited.pop(node.coordinates)
-                    queue.insert(node, node.f_cost_of_path)
+                    open_list_queue.insert(node, node.f_cost_of_path)
 
     total_expanded_nodes = len(visited)
     avg_depth = total_depth / total_expanded_nodes
@@ -96,7 +101,7 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
     min_depth = max_depth if min_depth == data.matrix_size ** 2 else max_depth
 
     if goal_node.cost > 0:
-        return AlgorithmResult(goal_node.path_to_node[:-1], goal_node.f_cost_of_path, total_expanded_nodes, 0,
+        return AlgorithmResult(goal_node.path_to_node[:-1], goal_node.g_cost_of_path, total_expanded_nodes, 0,
                                True,
                                0, 0, min_depth, max_depth, avg_depth)
     else:
