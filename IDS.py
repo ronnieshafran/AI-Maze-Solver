@@ -19,9 +19,6 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> (Algorithm
     observed_points_set.add(start_node.coordinates)
     while not stack.empty():
         current_node = stack.get()
-        if current_node.depth > search_depth:
-            remaining_nodes = True
-            break
 
         total_expanded_nodes += 1
         total_depth += current_node.depth
@@ -38,17 +35,21 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> (Algorithm
 
         if len(children_nodes_to_put_in_stack) == 0:
             min_depth = current_node.depth if current_node.depth < min_depth else min_depth
+
         else:
             for child_node in children_nodes_to_put_in_stack:
-                stack.put(child_node)
-                observed_points_set.add(child_node.coordinates)
+                if current_node.depth == search_depth and child_node.depth > search_depth:
+                    remaining_nodes = True
+                else:
+                    stack.put(child_node)
+                    observed_points_set.add(child_node.coordinates)
 
     avg_depth = total_depth / total_expanded_nodes
     if goal_node is not None:
         return (AlgorithmResult(goal_node.path_to_node[:-1], goal_node.g_cost_of_path, total_expanded_nodes, 0, True, 0, 0,
                                 min_depth, max_depth, avg_depth), remaining_nodes)
     else:
-        return (AlgorithmResult("", 0, total_expanded_nodes, 0, False, 0, 0, min_depth, max_depth, avg_depth), remaining_nodes)
+        return AlgorithmResult("", 0, total_expanded_nodes, 0, False, 0, 0, min_depth, max_depth, avg_depth), remaining_nodes
 
 
 def run(data: DataInput) -> AlgorithmResult:
