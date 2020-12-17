@@ -105,7 +105,7 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
     penetration = round(max_depth / total_expanded_nodes, 2)
     min_depth = max_depth if min_depth == data.matrix_size ** 2 else max_depth
     end_time = time.process_time()
-    runtime = round(end_time - start_time, 2)
+    runtime = round(end_time - start_time, 4)
     if goal_node.cost > 0:
         return AlgorithmResult(goal_node.path_to_node[:-1], goal_node.g_cost_of_path, total_expanded_nodes, penetration,
                                True,
