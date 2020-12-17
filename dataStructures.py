@@ -14,9 +14,6 @@ class PriorityQueue:
     def remove(self):
         return heapq.heappop(self._queue)[-1]
 
-    def remove_item(self,item):
-        return heapq.heappop(self._queue)[self._queue.index(item)]
-
     def is_empty(self):
         return len(self._queue) == 0
 
