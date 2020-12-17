@@ -1,3 +1,5 @@
+import time
+
 from dataStructures import *
 from queue import LifoQueue
 from UCS import get_children
@@ -53,13 +55,19 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> (Algorithm
 
 
 def run(data: DataInput) -> AlgorithmResult:
+    start_time = time.process_time()
     current_search = None
     depth = 0
     remaining_nodes = True
     successful = False
     while remaining_nodes and not successful:
+        # current_search returns tuple: (AlgorithmResult result, boolean remaining)
         current_search = DLS(data.matrix, data.matrix_size, data.start_point, data.end_point, depth)
         successful = current_search[0].successful
         remaining_nodes = current_search[1]
         depth += 1
-    return current_search[0]
+    end_time = time.process_time()
+    runtime = round(end_time - start_time, 2)
+    result = current_search[0]
+    result.set_time(runtime)
+    return result

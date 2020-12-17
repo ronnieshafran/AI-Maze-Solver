@@ -47,7 +47,7 @@ class DataInput:
 
 class AlgorithmResult:
     def __init__(self, final_path, path_cost, nodes_expanded, penetration, successful, EBF, avg_H, min_depth, max_depth,
-                 avg_depth):
+                 avg_depth, time = 0):
         self.max_depth = max_depth
         self.avg_depth = avg_depth
         self.min_depth = min_depth
@@ -58,6 +58,7 @@ class AlgorithmResult:
         self.nodes_expanded = nodes_expanded
         self.path_cost = path_cost
         self.final_path = final_path
+        self.time = time
 
     def __str__(self):
         if self.successful:
@@ -69,9 +70,13 @@ class AlgorithmResult:
                f'***FOR INFORMED SEARCHES: \n' \
                f'EBF: {self.EBF} \n' \
                f'avg H: {self.avg_H} \n' \
-               f'penetration: {self.penetration}'
+               f'penetration: {self.penetration} \n' \
+               f'runtime: {self.time}'
         else:
             return 'Algorithm Failed!'
+
+    def set_time(self, time):
+        self.time = time
 
 
 class Node:

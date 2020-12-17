@@ -1,6 +1,7 @@
 from dataStructures import *
 from Heuristics import zero_heuristic
 from numpy import ndarray
+import time
 
 
 def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray, h_function, end_point) -> Node:
@@ -57,6 +58,7 @@ def get_children(node, matrix, h_function=zero_heuristic, end_point=Point([0, 0]
 # TODO: how to hint to a func type? failed googling it
 
 def run(data: DataInput, h_function) -> AlgorithmResult:
+    start_time = time.process_time()
     # init variables and add first node to queue
     open_list_queue = PriorityQueue()
     open_list_dict = {}
@@ -99,12 +101,14 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
     avg_depth = total_depth / total_expanded_nodes
     # TODO: how do you correctly calculate min depth in UCS?
     min_depth = max_depth if min_depth == data.matrix_size ** 2 else max_depth
-
+    end_time = time.process_time()
+    runtime = round(end_time-start_time,2)
     if goal_node.cost > 0:
         return AlgorithmResult(goal_node.path_to_node[:-1], goal_node.g_cost_of_path, total_expanded_nodes, 0,
                                True,
-                               0, 0, min_depth, max_depth, avg_depth)
+                               0, 0, min_depth, max_depth, avg_depth,runtime)
     else:
-        return AlgorithmResult("", 0, total_expanded_nodes, 0, False, 0, 0, min_depth, max_depth, avg_depth)
+
+        return AlgorithmResult("", 0, total_expanded_nodes, 0, False, 0, 0, min_depth, max_depth, avg_depth,runtime)
 
     # repeat until queue is empty
