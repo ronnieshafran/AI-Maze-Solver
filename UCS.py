@@ -66,6 +66,7 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
     min_depth = data.matrix_size ** 2
     max_depth = 0
     total_depth = 0
+    total_h = 0
     start_node = Node(data.start_point, data.matrix[data.start_point.x][data.start_point.y])
     goal_node = Node()
     open_list_queue.insert(start_node, 0)
@@ -81,6 +82,7 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
         if current_node.depth > max_depth:
             max_depth = current_node.depth
         total_depth += current_node.depth
+        total_h += current_node.heuristic_value
 
         visited |= {current_node.coordinates: current_node.f_cost_of_path}
         nodes_to_enqueue = get_children(current_node, data.matrix, h_function, data.end_point)
@@ -98,17 +100,19 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
                     open_list_queue.insert(node, node.f_cost_of_path)
 
     total_expanded_nodes = len(visited)
-    avg_depth = total_depth / total_expanded_nodes
-    # TODO: how do you correctly calculate min depth in UCS?
+    avg_depth = round(total_depth / total_expanded_nodes,2)
+    avg_h = round(total_h / total_expanded_nodes,2)
+    EBF = round(total_expanded_nodes ** (1/max_depth),2)
+    penetration = round(max_depth / total_expanded_nodes,2)
     min_depth = max_depth if min_depth == data.matrix_size ** 2 else max_depth
     end_time = time.process_time()
-    runtime = round(end_time-start_time,2)
+    runtime = round(end_time - start_time, 2)
     if goal_node.cost > 0:
-        return AlgorithmResult(goal_node.path_to_node[:-1], goal_node.g_cost_of_path, total_expanded_nodes, 0,
+        return AlgorithmResult(goal_node.path_to_node[:-1], goal_node.g_cost_of_path, total_expanded_nodes, penetration,
                                True,
-                               0, 0, min_depth, max_depth, avg_depth,runtime)
+                               EBF, avg_h, min_depth, max_depth, avg_depth, runtime)
     else:
 
-        return AlgorithmResult("", 0, total_expanded_nodes, 0, False, 0, 0, min_depth, max_depth, avg_depth,runtime)
+        return AlgorithmResult("", 0, total_expanded_nodes, penetration, False, EBF, avg_h, min_depth, max_depth, avg_depth, runtime)
 
     # repeat until queue is empty
