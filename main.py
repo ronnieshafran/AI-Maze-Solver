@@ -17,7 +17,7 @@ def parse_input_file(file_path: str) -> DataInput:
 
 # TODO: general TODOs: calc run time, refactor data structures to different files (?), find better name for UCS/A* common function
 if __name__ == '__main__':
-    di = parse_input_file(r'C:\Users\ronni\PycharmProjects\AIFinalProject\medium_test.txt')
+    di = parse_input_file(r'C:\Users\ronni\PycharmProjects\AIFinalProject\large_test.txt')
     if di.selected_algorithm == "UCS":
         import UCS
         res = UCS.run(di, Heuristics.zero_heuristic)
