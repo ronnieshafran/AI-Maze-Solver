@@ -6,7 +6,6 @@ from UCS import get_children
 
 
 def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> (AlgorithmResult, bool):
-    # DLS without duplicates - every node enters the stack at most once
     stack = LifoQueue()
     observed_points_set = set()  # meant to avoid observing the same node twice if two nodes led to it
     total_expanded_nodes = 0
@@ -20,31 +19,32 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> (Algorithm
     stack.put(start_node)
     observed_points_set.add(start_node.coordinates)
     while not stack.empty():
+
         current_node = stack.get()
 
-        total_expanded_nodes += 1
-        total_depth += current_node.depth
         max_depth = current_node.depth if current_node.depth > max_depth else max_depth
 
         if current_node.coordinates == end_point:
             goal_node = current_node
             break
 
-        children_nodes = get_children(current_node, matrix)
-        children_nodes_to_put_in_stack = [child_node for child_node in children_nodes
-                                          if child_node.coordinates not in observed_points_set]
-        children_nodes_to_put_in_stack.reverse()
+        if current_node.depth >= search_depth:
+            remaining_nodes = True
+            continue
 
-        if len(children_nodes_to_put_in_stack) == 0:
+        total_depth += current_node.depth
+        total_expanded_nodes += 1
+        observed_points_set.add(current_node.coordinates)
+        children_nodes = get_children(current_node, matrix)
+        children_nodes.reverse()
+        if len(children_nodes) == 0:
             min_depth = current_node.depth if current_node.depth < min_depth else min_depth
 
-        else:
-            for child_node in children_nodes_to_put_in_stack:
-                if current_node.depth == search_depth and child_node.depth > search_depth:
-                    remaining_nodes = True
-                else:
-                    stack.put(child_node)
-                    observed_points_set.add(child_node.coordinates)
+        for node in children_nodes:
+            if node.coordinates in observed_points_set:
+                continue
+            else:
+                stack.put(node)
 
     if goal_node is not None:
         return (AlgorithmResult(goal_node.path_to_node[:-1], goal_node.g_cost_of_path, total_expanded_nodes, 0, True, 0, 0,
@@ -76,5 +76,5 @@ def run(data: DataInput) -> AlgorithmResult:
     result.nodes_expanded = total_nodes_expanded
     result.EBF = round(total_nodes_expanded ** (1 / depth), 2)
     result.penetration = round(depth / total_nodes_expanded, 2)
-    result.avg_depth = round(total_depth/total_nodes_expanded,2)
+    result.avg_depth = round(total_depth / total_nodes_expanded, 2)
     return result
