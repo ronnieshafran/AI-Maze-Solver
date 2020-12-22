@@ -3,6 +3,7 @@
 from dataStructures import DataInput, Point
 import numpy
 import Heuristics
+import os.path
 
 
 def parse_input_file(file_path: str) -> DataInput:
@@ -15,9 +16,15 @@ def parse_input_file(file_path: str) -> DataInput:
         return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix)
 
 
-# TODO: general TODOs: calc run time, refactor data structures to different files (?), find better name for UCS/A* common function
+# TODO: general TODOs: calc run time, refactor data structures to different files (?), find better name for UCS/A*
+#  common function
 if __name__ == '__main__':
-    di = parse_input_file(r'D:\AI_project\AIFinalProject\large_test.txt')
+
+    dir_path = os.path.dirname(__file__)
+    test_name = "large_test.txt"
+    test_path = os.path.join(dir_path, test_name)
+    di = parse_input_file(test_path)
+
     if di.selected_algorithm == "UCS":
         import UCS
         res = UCS.run(di, Heuristics.zero_heuristic)
