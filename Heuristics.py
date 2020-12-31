@@ -13,10 +13,10 @@ def manhattan_distance(node_coordinates, end_point):
     return horizontal + vertical
 
 
-def max_heuristic(node_coordinates, end_point):
+def min_heuristic(node_coordinates, end_point):
     euclidean = euclidean_distance(node_coordinates, end_point)
     manhattan = manhattan_distance(node_coordinates, end_point)
-    return max(euclidean, manhattan)
+    return min(euclidean, manhattan)
 
 
 def zero_heuristic(node_coordinates, end_point):

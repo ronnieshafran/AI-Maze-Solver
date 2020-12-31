@@ -1,6 +1,6 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-from dataStructures import DataInput, Point
+from dataStructures import DataInput, Point, StatsContainer
 import numpy
 import Heuristics
 import os.path
@@ -20,10 +20,9 @@ def parse_input_file(file_path: str) -> DataInput:
 #  common function
 if __name__ == '__main__':
 
-    dir_path = os.path.dirname(__file__)
+    path = os.path.dirname(__file__)
     test_name = "large_test.txt"
-    test_path = os.path.join(dir_path, test_name)
-    di = parse_input_file(test_path)
+    di = parse_input_file(os.path.join(path, test_name))
 
     if di.selected_algorithm == "UCS":
         import UCS
@@ -39,5 +38,10 @@ if __name__ == '__main__':
 
         res = UCS.run(di, Heuristics.euclidean_distance)
         print(res)
+
+    elif di.selected_algorithm == "IDA*":
+        import IDAstar
+        print(ida_star(di, Heuristics.euclidean_distance, StatsContainer()))
+
     else:
         raise Exception("something went wrong :(")
