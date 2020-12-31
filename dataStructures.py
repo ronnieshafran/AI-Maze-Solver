@@ -120,7 +120,7 @@ class AlgorithmResult:
 
 class Node:
     def __init__(self, coordinates=Point([0, 0]), cost=-1, path_to_node='', depth=0, g_cost_of_path=0, heuristic_value=0,
-                 f_cost_of_path=0):
+                 f_cost_of_path=0, list_of_cords=[]):
         self.g_cost_of_path = g_cost_of_path
         self.heuristic_value = heuristic_value
         self.path_to_node = path_to_node
@@ -128,3 +128,4 @@ class Node:
         self.cost = cost
         self.coordinates = coordinates
         self.f_cost_of_path = f_cost_of_path
+        self.list_of_cords = list_of_cords

@@ -21,7 +21,7 @@ def parse_input_file(file_path: str) -> DataInput:
 if __name__ == '__main__':
 
     path = os.path.dirname(__file__)
-    test_name = "large_test.txt"
+    test_name = "small_test.txt"
     di = parse_input_file(os.path.join(path, test_name))
 
     if di.selected_algorithm == "UCS":
@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     elif di.selected_algorithm == "IDA*":
         import IDAstar
-        print(ida_star(di, Heuristics.euclidean_distance, StatsContainer()))
+        print(IDAstar.ida_star(di, Heuristics.manhattan_distance, StatsContainer()))
 
     else:
         raise Exception("something went wrong :(")
