@@ -37,12 +37,13 @@ def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray, h_
             return Node()
         next_node_h_value = h_function(next_node_coordinates, end_point)
         list_of_cords = parent_node.list_of_cords[:]
+        list_of_cords.append(parent_node.coordinates)
         return Node(coordinates=next_node_coordinates, cost=next_node_value,
                     path_to_node=parent_node.path_to_node + f'{direction}-', depth=parent_node.depth + 1,
                     g_cost_of_path=parent_node.g_cost_of_path + next_node_value,
                     heuristic_value=next_node_h_value,
                     f_cost_of_path=parent_node.g_cost_of_path + next_node_value + next_node_h_value,
-                    list_of_cords=list_of_cords.append(parent_node.coordinates))
+                    list_of_cords=list_of_cords)
     except:
         return Node()
 

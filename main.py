@@ -39,9 +39,9 @@ if __name__ == '__main__':
         res = UCS.run(di, Heuristics.euclidean_distance)
         print(res)
 
-    elif di.selected_algorithm == "IDA*":
+    elif di.selected_algorithm == "IDASTAR":
         import IDAstar
-        print(IDAstar.ida_star(di, Heuristics.euclidean_distance, StatsContainer()))
+        print(IDAstar.ida_star(di, Heuristics.manhattan_distance, StatsContainer()))
 
     else:
         raise Exception("something went wrong :(")
