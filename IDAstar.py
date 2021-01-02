@@ -13,7 +13,7 @@ def ida_star(data: DataInput, h_function, overall_stats: StatsContainer):
     root = Node(data.start_point, data.matrix[data.start_point.x][data.start_point.y])
     f_limit = h_function(root.coordinates, data.end_point)
     while 1:
-        goal, f_limit, overall_stats = dfs_contour(data, root, f_limit, h_function, overall_stats)
+        goal, f_limit, overall_stats = dfs_contour(data, root, f_limit, h_function, overall_stats, root.heuristic_value)
         if goal is not None or f_limit == sys.maxsize:
             overall_stats.end_time = time.process_time()
             result.accumulate_stats(overall_stats)
@@ -26,10 +26,12 @@ def ida_star(data: DataInput, h_function, overall_stats: StatsContainer):
             return result
 
 
-def dfs_contour(data: DataInput, node, f_limit, h_function, stats: StatsContainer):
+def dfs_contour(data: DataInput, node, f_limit, h_function, stats: StatsContainer, const_fix):
     next_f = sys.maxsize
 
     if node.f_cost_of_path > f_limit:
+        if stats.min_depth > node.depth:
+            stats.min_depth = node.depth
         return None, node.f_cost_of_path, stats
 
     stats.total_depth += node.depth
@@ -48,7 +50,7 @@ def dfs_contour(data: DataInput, node, f_limit, h_function, stats: StatsContaine
             stats.max_depth = successor.depth
         if successor.coordinates in node.list_of_cords:
             continue
-        solution, new_f, stats = dfs_contour(data, successor, f_limit, h_function, stats)
+        solution, new_f, stats = dfs_contour(data, successor, f_limit, h_function, stats, const_fix)
         if solution is not None:
             return solution, f_limit, stats
         next_f = min(next_f, new_f)
