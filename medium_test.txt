@@ -1,4 +1,4 @@
-ASTAR
+IDASTAR
 17
 0,0
 16,16
