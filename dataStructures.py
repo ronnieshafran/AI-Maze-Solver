@@ -77,20 +77,18 @@ class AlgorithmResult:
         self.time = time
 
     def __str__(self):
-        if self.successful:
-            return f'final path: {self.final_path} \n' \
-                   f'final cost: {self.path_cost} \n' \
-                   f'nodes expanded: {self.nodes_expanded} \n' \
-                   f'max depth: {self.max_depth} \n' \
-                   f'min depth: {self.min_depth} \n' \
-                   f'avg depth: {self.avg_depth} \n' \
-                   f'***FOR INFORMED SEARCHES: \n' \
-                   f'EBF: {self.EBF} \n' \
-                   f'avg H: {self.avg_H} \n' \
-                   f'penetration: {self.penetration} \n' \
-                   f'runtime: {self.time}'
-        else:
-            return 'Algorithm Failed!'
+        return f'Success: {self.successful} \n' \
+               f'final path: {self.final_path} \n' \
+               f'final cost: {self.path_cost} \n' \
+               f'nodes expanded: {self.nodes_expanded} \n' \
+               f'max depth: {self.max_depth} \n' \
+               f'min depth: {self.min_depth} \n' \
+               f'avg depth: {self.avg_depth} \n' \
+               f'***FOR INFORMED SEARCHES: \n' \
+               f'EBF: {self.EBF} \n' \
+               f'avg H: {self.avg_H} \n' \
+               f'penetration: {self.penetration} \n' \
+               f'runtime: {self.time}'
 
     # could be expanded to more stats
     def accumulate_stats_for_iterative_algorithms(self, other):
@@ -105,22 +103,6 @@ class AlgorithmResult:
         self.penetration = round(stats.max_depth / stats.total_nodes_expanded, 2)
         self.nodes_expanded = stats.total_nodes_expanded
         self.time = stats.end_time - stats.start_time
-
-    def __str__(self):
-        if self.successful:
-            return f'final path: {self.final_path} \n' \
-                   f'final cost: {self.path_cost} \n' \
-                   f'nodes expanded: {self.nodes_expanded} \n' \
-                   f'max depth: {self.max_depth} \n' \
-                   f'min depth: {self.min_depth} \n' \
-                   f'avg depth: {self.avg_depth} \n' \
-                   f'***FOR INFORMED SEARCHES: \n' \
-                   f'EBF: {self.EBF} \n' \
-                   f'avg H: {self.avg_H} \n' \
-                   f'penetration: {self.penetration} \n' \
-                   f'runtime: {self.time}'
-        else:
-            return 'Algorithm Failed!'
 
     def set_time(self, time):
         self.time = time

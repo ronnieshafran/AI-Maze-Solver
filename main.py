@@ -12,7 +12,7 @@ def parse_input_file(file_path: str) -> DataInput:
         matrix_size = int(file.readline())
         start_point = Point([int(num) for num in file.readline().split(',')])
         end_point = Point([int(num) for num in file.readline().split(',')])
-        matrix = numpy.array([[int(num) for num in line.split(',')] for line in file.readlines()])
+        matrix = numpy.array([[float(num) for num in line.split(',')] for line in file.readlines()])
         return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix)
 
 
@@ -35,7 +35,6 @@ if __name__ == '__main__':
         print(res)
     elif di.selected_algorithm == "ASTAR":
         import UCS
-
         res = UCS.run(di, Heuristics.euclidean_distance)
         print(res)
 
