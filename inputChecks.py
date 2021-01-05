@@ -1,7 +1,7 @@
 from dataStructures import DataInput, AlgorithmResult
 # 1- start point is end point
-# 2- out of bounds
-# 3- illegal point
+# 2- illegal point
+# 3- out of bounds
 # 0- good to go
 
 
