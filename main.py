@@ -1,8 +1,9 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-from dataStructures import DataInput, Point
+from dataStructures import DataInput, Point, StatsContainer
 import numpy
 import Heuristics
+import os.path
 
 
 def parse_input_file(file_path: str) -> DataInput:
@@ -15,22 +16,38 @@ def parse_input_file(file_path: str) -> DataInput:
         return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix)
 
 
-# TODO: general TODOs: calc run time, refactor data structures to different files (?), find better name for UCS/A* common function
+# TODO: general TODOs: calc run time, refactor data structures to different files (?), find better name for UCS/A*
+#  common function
 if __name__ == '__main__':
-    di = parse_input_file(r'C:\Users\ronni\PycharmProjects\AIFinalProject\large_test.txt')
+
+    path = os.path.dirname(__file__)
+    test_name = "medium_test.txt"
+    di = parse_input_file(os.path.join(path, test_name))
+
     if di.selected_algorithm == "UCS":
         import UCS
         res = UCS.run(di, Heuristics.zero_heuristic)
         print(res)
+
     elif di.selected_algorithm == "IDS":
         import IDS
-
         res = IDS.run(di)
         print(res)
+
     elif di.selected_algorithm == "ASTAR":
         import UCS
-
         res = UCS.run(di, Heuristics.euclidean_distance)
         print(res)
+
+    elif di.selected_algorithm == "IDASTAR":
+        import IDAstar
+        res = IDAstar.ida_star(di, Heuristics.manhattan_distance, StatsContainer())
+        print(res)
+
+    elif di.selected_algorithm == "BIASTAR":
+        import BI_Astar
+        res = BI_Astar.bi_astar(di, Heuristics.manhattan_distance, StatsContainer())
+        print(res)
+
     else:
         raise Exception("something went wrong :(")
