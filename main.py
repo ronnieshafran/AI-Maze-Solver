@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     elif di.selected_algorithm == "BIASTAR":
         import BI_Astar
-        res = BI_Astar.bi_astar(di, Heuristics.manhattan_distance, StatsContainer())
+        res = BI_Astar.run(di, Heuristics.octile_distance)
         print(res)
 
     else:
