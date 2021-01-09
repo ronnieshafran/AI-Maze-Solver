@@ -18,6 +18,8 @@ class PriorityQueue:
         return len(self._queue) == 0
 
 
+
+
 class Point:
     def __init__(self, coordinates):
         self.x = coordinates[0]

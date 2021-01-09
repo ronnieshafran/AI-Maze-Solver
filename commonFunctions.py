@@ -53,6 +53,8 @@ def get_children(node, matrix, h_function=zero_heuristic, end_point=Point([0, 0]
     directions = ("RU", "R", "RD", "D", "LD", "L", "LU", "U")
     for direction in directions:
         current_node = get_node_in_direction(node, direction, matrix, h_function, end_point)
+        if current_node.coordinates in node.list_of_cords:
+            continue
         if current_node.cost > 0:
             children.append(current_node)
     return children
