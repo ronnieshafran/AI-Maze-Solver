@@ -13,10 +13,11 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
     backward_visited = {}
     root = Node(data.start_point, data.matrix[data.start_point.x][data.start_point.y])
     goal = Node(data.end_point, data.matrix[data.end_point.x][data.end_point.y])
+    goal.g_cost_of_path = goal.cost
     goal_forward = Node()
     goal_backward = Node()
     forward_open_queue.insert(root, 0)
-    backward_open_queue.insert(goal, 0)
+    backward_open_queue.insert(goal, goal.cost)
     max_depth = 0
     min_depth = 0
     total_h = 0
@@ -112,8 +113,8 @@ def convert_priority_que(que: PriorityQueue()):
 
 def find_optimal_path(forward: Node(), backward: Node(), visited_forward: {}, visited_backward: {},
                       open_forward: {}, open_backward: {}, root_cost):
-    optimal_path = ()
-    min_val = forward.g_cost_of_path + backward.g_cost_of_path
+    optimal_path = (forward, backward)
+    min_val = forward.g_cost_of_path + backward.g_cost_of_path - forward.cost
 
     for node in visited_forward:
         forward_node = visited_forward[node]
@@ -121,9 +122,10 @@ def find_optimal_path(forward: Node(), backward: Node(), visited_forward: {}, vi
             backward_node = visited_backward.get(node)
             g_cost_forward = forward_node.g_cost_of_path
             g_cost_backward = backward_node.g_cost_of_path
-            if g_cost_backward + g_cost_forward < min_val:
-                min_val = g_cost_backward + g_cost_forward
+            if g_cost_backward + g_cost_forward - backward_node.cost < min_val:
+                min_val = g_cost_backward + g_cost_forward - backward_node.cost
                 optimal_path = (forward_node, backward_node)
+
 
     return optimal_path, min_val
 

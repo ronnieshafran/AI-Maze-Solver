@@ -1,4 +1,4 @@
-BIASTAR
+ASTAR
 17
 0,0
 16,16
