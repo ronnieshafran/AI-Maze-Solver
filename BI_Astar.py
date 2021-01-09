@@ -26,33 +26,26 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
     while not (forward_open_queue.is_empty() and backward_open_queue.is_empty()):
         current_forward_node = forward_open_queue.remove()
         current_backward_node = backward_open_queue.remove()
-
+        if current_forward_node.coordinates in forward_visited:
+            backward_open_queue.insert(current_backward_node, 0)
+            continue
         # statistics calculation
         if current_forward_node.depth > max_depth:
             max_depth = current_forward_node.depth
-        if goal.depth - current_backward_node.depth > max_depth:
-            max_depth = goal.depth - current_backward_node.depth
-
-        total_depth += current_forward_node.depth + goal.depth - current_backward_node.depth
-        total_h += current_forward_node.heuristic_value + current_backward_node.heuristic_value
+        total_depth += current_forward_node.depth
+        total_h += current_forward_node.heuristic_value
 
         if current_forward_node.coordinates == current_backward_node.coordinates:
             goal_forward = current_forward_node
-            goal_backward = current_backward_node
+            goal_backward = backward_open_queue.get_min()
             break
 
         forward_visited |= {current_forward_node.coordinates: current_forward_node}
         forward_nodes_to_enqueue = get_children(current_forward_node, data.matrix, h_function, data.end_point)
 
-        backward_visited |= {current_backward_node.coordinates: current_backward_node}
-        backward_nodes_to_enqueue = get_children(current_backward_node, data.matrix, h_function, data.start_point)
-
         # check for min depth when the search path is "stuck"
         if len(forward_nodes_to_enqueue) == 0 and min_depth > current_forward_node.depth:
             min_depth = current_forward_node.depth
-        if len(backward_nodes_to_enqueue) == 0 and min_depth > goal.depth - current_backward_node.depth:
-            min_depth = goal.depth - current_backward_node.depth
-
         else:
             for node in forward_nodes_to_enqueue:
                 if node.coordinates not in forward_visited:
@@ -61,7 +54,18 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
                 elif node.f_cost_of_path < forward_visited.get(node.coordinates).f_cost_of_path:
                     forward_visited.pop(node.coordinates)
                     forward_open_queue.insert(node, node.f_cost_of_path)
-
+        # -------------------------------------------------------------------------- #
+        if current_backward_node.coordinates in backward_visited:
+            continue
+        if goal.depth - current_backward_node.depth > max_depth:
+            max_depth = current_forward_node.depth
+        total_depth += goal.depth - current_backward_node.depth
+        total_h += current_backward_node.heuristic_value
+        backward_visited |= {current_backward_node.coordinates: current_backward_node}
+        backward_nodes_to_enqueue = get_children(current_backward_node, data.matrix, h_function, data.start_point)
+        if len(backward_nodes_to_enqueue) == 0 and min_depth > goal.depth - current_backward_node.depth:
+            min_depth = goal.depth - current_backward_node.depth
+        else:
             for node in backward_nodes_to_enqueue:
                 if node.coordinates not in backward_visited:
                     backward_open_queue.insert(node, node.f_cost_of_path)
@@ -69,6 +73,7 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
                 elif node.f_cost_of_path < backward_visited.get(node.coordinates).f_cost_of_path:
                     backward_visited.pop(node.coordinates)
                     backward_open_queue.insert(node, node.f_cost_of_path)
+
 
     # stats calculation, needs to be updated for this algorithm.
     total_expanded_nodes = len(forward_visited) + len(backward_visited)

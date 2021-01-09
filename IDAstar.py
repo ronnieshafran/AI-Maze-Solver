@@ -6,7 +6,7 @@ import sys
 from commonFunctions import *
 
 
-def ida_star(data: DataInput, h_function, overall_stats: StatsContainer):
+def run(data: DataInput, h_function, overall_stats: StatsContainer):
     overall_stats.start_time = time.process_time()
     overall_stats.min_depth = data.matrix_size ** 2
     result = AlgorithmResult()
