@@ -21,7 +21,7 @@ def parse_input_file(file_path: str) -> DataInput:
 if __name__ == '__main__':
 
     path = os.path.dirname(__file__)
-    test_name = "medium_test.txt"
+    test_name = "small_test.txt"
     di = parse_input_file(os.path.join(path, test_name))
 
     if di.selected_algorithm == "UCS":

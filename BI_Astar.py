@@ -87,15 +87,13 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
     if goal_forward.cost > 0 and goal_backward.cost > 0:
         optimal_path, min_val = (
             find_optimal_path(current_forward_node, current_backward_node, forward_visited, backward_visited,
-                              convert_priority_que(forward_open_queue), convert_priority_que(backward_open_queue)))
+                              convert_priority_que(forward_open_queue), convert_priority_que(backward_open_queue), root.cost))
         if min_val < goal_forward.g_cost_of_path + goal_backward.g_cost_of_path:
             goal_forward = optimal_path[0]
             goal_backward = optimal_path[1]
 
-        return AlgorithmResult(goal_forward.path_to_node[:-1] + goal_backward.path_to_node[:-1],
-                               goal_forward.g_cost_of_path + goal_backward.g_cost_of_path,
-                               total_expanded_nodes, penetration,
-                               True,
+        return AlgorithmResult(goal_forward.path_to_node[:-1] + fix_backward_path(goal_backward),
+                               min_val, total_expanded_nodes, penetration, True,
                                EBF, avg_h, min_depth, max_depth, avg_depth, time.process_time() - start_time)
     else:
         return AlgorithmResult("", 0, total_expanded_nodes, penetration, False, EBF, avg_h, min_depth, max_depth,
@@ -113,12 +111,12 @@ def convert_priority_que(que: PriorityQueue()):
 
 
 def find_optimal_path(forward: Node(), backward: Node(), visited_forward: {}, visited_backward: {},
-                      open_forward: {}, open_backward: {}):
+                      open_forward: {}, open_backward: {}, root_cost):
     optimal_path = ()
     min_val = forward.g_cost_of_path + backward.g_cost_of_path
 
     for node in visited_forward:
-        forward_node = visited_forward.get(node)
+        forward_node = visited_forward[node]
         if node in visited_backward:
             backward_node = visited_backward.get(node)
             g_cost_forward = forward_node.g_cost_of_path
@@ -127,14 +125,29 @@ def find_optimal_path(forward: Node(), backward: Node(), visited_forward: {}, vi
                 min_val = g_cost_backward + g_cost_forward
                 optimal_path = (forward_node, backward_node)
 
-    for node in open_forward:
-        forward_node = open_forward.get(node)
-        if node in open_backward:
-            backward_node = open_backward.get(node)
-            g_cost_forward = forward_node.g_cost_of_path
-            g_cost_backward = backward_node.g_cost_of_path
-            if g_cost_backward + g_cost_forward < min_val:
-                min_val = g_cost_backward + g_cost_forward
-                optimal_path = (forward_node, backward_node)
-
     return optimal_path, min_val
+
+
+def fix_backward_path(node: Node()):
+    path = node.list_of_cords[::-1]
+    path.insert(0, node.coordinates)
+    fixed_path = ''
+    for index in range(len(path) - 1):
+        if path[index].x + 1 == path[index + 1].x and path[index].y + 1 == path[index + 1].y:
+            fixed_path += "-RD"
+        elif path[index].x + 1 == path[index + 1].x and path[index].y == path[index + 1].y:
+            fixed_path += "-D"
+        elif path[index].x + 1 == path[index + 1].x and path[index].y - 1 == path[index + 1].y:
+            fixed_path += "-LD"
+        elif path[index].x == path[index + 1].x and path[index].y - 1 == path[index + 1].y:
+            fixed_path += "-L"
+        elif path[index].x - 1 == path[index + 1].x and path[index].y - 1 == path[index + 1].y:
+            fixed_path += "-LU"
+        elif path[index].x - 1 == path[index + 1].x and path[index].y == path[index + 1].y:
+            fixed_path += "-U"
+        elif path[index].x - 1 == path[index + 1].x and path[index].y + 1 == path[index + 1].y:
+            fixed_path += "-RU"
+        elif path[index].x == path[index + 1].x and path[index].y + 1 == path[index + 1].y:
+            fixed_path += "-R"
+    return fixed_path
+
