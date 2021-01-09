@@ -1,8 +1,6 @@
-from dataStructures import *
-from commonFunctions import *
-from Heuristics import octile_distance
-from numpy import ndarray
 import time
+
+from commonFunctions import *
 
 
 def run(data: DataInput, h_function) -> AlgorithmResult:
@@ -23,7 +21,7 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
     total_h = 0
     total_depth = 0
 
-    while not (forward_open_queue.is_empty() and backward_open_queue.is_empty()):
+    while forward_open_queue.is_empty() is False and backward_open_queue.is_empty() is False:
         current_forward_node = forward_open_queue.remove()
         current_backward_node = backward_open_queue.remove()
         if current_forward_node.coordinates in forward_visited:
@@ -73,7 +71,6 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
                 elif node.f_cost_of_path < backward_visited.get(node.coordinates).f_cost_of_path:
                     backward_visited.pop(node.coordinates)
                     backward_open_queue.insert(node, node.f_cost_of_path)
-
 
     # stats calculation, needs to be updated for this algorithm.
     total_expanded_nodes = len(forward_visited) + len(backward_visited)
@@ -187,4 +184,3 @@ def fix_backward_path(node: Node(), all_backward):
         if all_backward and index != len(path) - 2:
             fixed_path += "-"
     return fixed_path
-
