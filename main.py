@@ -45,7 +45,7 @@ def run_algorithm(input_data):
 if __name__ == '__main__':
 
     path = os.path.dirname(__file__)
-    test_name = "medium_test.txt"
+    test_name = "test_200_simple.txt"
     data = parse_input_file(os.path.join(path, test_name))
     legal, result = check_input(data)
 
