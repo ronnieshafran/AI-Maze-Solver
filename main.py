@@ -82,6 +82,10 @@ if __name__ == '__main__':
             if data.selected_algorithm == "IDASTAR":
                 continue
             result = run_algorithm(data)
+            if result.successful:
+                result_file = f"test_{i}_results.txt"
+                with open(result_file, "w") as file:
+                    file.write(result.get_results())
             result.problem = test_name
             if data.selected_algorithm == "ASTAR" or data.selected_algorithm == "BIASTAR":
                 result.h_function="chebyshev"
