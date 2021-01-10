@@ -65,7 +65,7 @@ class StatsContainer:
 class AlgorithmResult:
     def __init__(self, final_path="", path_cost=0, nodes_expanded=0, penetration=0, successful=0, EBF=0.0, avg_H=0,
                  min_depth=0,
-                 max_depth=0, avg_depth=0, time=0):
+                 max_depth=0, avg_depth=0, time=0, h_function="", problem=""):
         self.max_depth = max_depth
         self.avg_depth = avg_depth
         self.min_depth = min_depth
@@ -77,6 +77,8 @@ class AlgorithmResult:
         self.path_cost = path_cost
         self.final_path = final_path
         self.time = time
+        self.h_function = h_function
+        self.problem = problem
 
     # could be expanded to more stats
     def accumulate_stats_for_iterative_algorithms(self, other):
@@ -108,6 +110,10 @@ class AlgorithmResult:
 
     def set_time(self, time):
         self.time = time
+
+    def get_results(self):
+        return f'{self.final_path} {self.path_cost} {self.nodes_expanded}'
+
 
 
 class Node:

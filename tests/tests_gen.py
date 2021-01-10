@@ -40,12 +40,22 @@ def get_point(matrix, size):
 
 
 if __name__ == '__main__':
-    algorithms = ["UCS", "IDS", "ASTAR", "BIASTAR", "IDA"]
-    size = random.randint(5, 15)
-    matrix = generate_random_matrix(size)
-    insert_blocks(matrix, size)
-    print(random.choice(algorithms))
-    print(size)
-    print(f'{get_point(matrix, size)[0]},{get_point(matrix, size)[1]}')
-    print(f'{get_point(matrix, size)[0]},{get_point(matrix, size)[1]}')
-    parse_matrix(matrix)
+    algorithms = ["UCS", "IDS", "ASTAR", "BIASTAR", "IDASTAR"]
+    for i in range(20):
+        file_name = f"test_{i}.txt"
+        with open(file_name, "w") as test_file:
+            size = random.randint(5, 8)
+            matrix = generate_random_matrix(size)
+            insert_blocks(matrix, size)
+            test_file.write(f'{random.choice(algorithms)}\n')
+            test_file.write(f'{size}\n')
+            test_file.write(f'{get_point(matrix, size)[0]},{get_point(matrix, size)[1]}\n')
+            test_file.write(f'{get_point(matrix, size)[0]},{get_point(matrix, size)[1]}\n')
+            # parse_matrix(matrix)
+            for row in matrix:
+                for col in row:
+                    if col != row[-1]:
+                        test_file.write(f'{round(col, 2)}, ')
+                    else:
+                        test_file.write(f'{round(col, 2)}')
+                test_file.write("\n")
