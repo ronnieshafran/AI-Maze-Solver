@@ -5,6 +5,7 @@ from inputChecks import check_input
 import numpy
 import Heuristics
 import os.path
+import time
 
 
 def parse_input_file(file_path: str) -> DataInput:
@@ -17,35 +18,35 @@ def parse_input_file(file_path: str) -> DataInput:
         return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix)
 
 
-def run_algorithm(input_data):
+def run_algorithm(input_data, time_limit):
     if input_data.selected_algorithm == "UCS":
         import UCS
-        res = UCS.run(input_data, Heuristics.zero_heuristic)
+        res = UCS.run(input_data, Heuristics.zero_heuristic, time_limit)
         print(res)
     elif input_data.selected_algorithm == "IDS":
         import IDS
-        res = IDS.run(input_data)
+        res = IDS.run(input_data, time_limit)
         print(res)
     elif input_data.selected_algorithm == "ASTAR":
         import UCS
-        res = UCS.run(input_data, Heuristics.octile_distance)
+        res = UCS.run(input_data, Heuristics.octile_distance, time_limit)
         print(res)
     elif input_data.selected_algorithm == "BIASTAR":
         import BI_Astar
-        res = BI_Astar.run(input_data, Heuristics.octile_distance)
+        res = BI_Astar.run(input_data, Heuristics.octile_distance, time_limit)
         print(res)
     elif input_data.selected_algorithm == "IDASTAR":
         import IDAstar
-        print(IDAstar.run(input_data, Heuristics.octile_distance, StatsContainer()))
+        print(IDAstar.run(input_data, Heuristics.octile_distance, StatsContainer()), time_limit)
     else:
         raise Exception("something went wrong :(")
 
 
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
 if __name__ == '__main__':
-
+    runtime_limit = input("Please enter time limit for the program\n")
     path = os.path.dirname(__file__)
-    test_name = "test_200_simple.txt"
+    test_name = "medium_test.txt"
     data = parse_input_file(os.path.join(path, test_name))
     legal, result = check_input(data)
 
@@ -54,9 +55,13 @@ if __name__ == '__main__':
             # Start/end point coordinates are illegal
             print("Invalid coordinates of start point or end point.")
         else:
-            # Start point == End point
-            print("Start Point == End Point")
-            print(result)
-
+            if legal is True:
+                # Start point == End point
+                print("Start Point == End Point")
+                print(result)
+            else:
+                # Root Cost is -1
+                print("Root Cost is -1")
+                print(result)
     else:
-        run_algorithm(data)
+        run_algorithm(data, runtime_limit)

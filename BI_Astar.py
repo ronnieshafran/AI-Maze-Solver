@@ -142,6 +142,27 @@ def find_optimal_path(forward: Node(), backward: Node(), visited_forward: {}, vi
                 min_val = g_cost_backward + g_cost_forward - backward_node.cost
                 optimal_path = (forward_node, backward_node)
 
+    for node in open_forward:
+        forward_node = open_forward[node]
+        if node in visited_backward:
+            backward_node = visited_backward.get(node)
+            g_cost_forward = forward_node.g_cost_of_path
+            g_cost_backward = backward_node.g_cost_of_path
+            if g_cost_backward + g_cost_forward - backward_node.cost < min_val:
+                min_val = g_cost_backward + g_cost_forward - backward_node.cost
+                optimal_path = (forward_node, backward_node)
+
+
+    for node in visited_forward:
+        forward_node = visited_forward[node]
+        if node in open_backward:
+            backward_node = open_backward.get(node)
+            g_cost_forward = forward_node.g_cost_of_path
+            g_cost_backward = backward_node.g_cost_of_path
+            if g_cost_backward + g_cost_forward - backward_node.cost < min_val:
+                min_val = g_cost_backward + g_cost_forward - backward_node.cost
+                optimal_path = (forward_node, backward_node)
+
     return optimal_path, min_val
 
 

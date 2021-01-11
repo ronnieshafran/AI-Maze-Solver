@@ -17,7 +17,9 @@ class PriorityQueue:
     def is_empty(self):
         return len(self._queue) == 0
 
-
+    @property
+    def queue(self):
+        return self._queue
 
 
 class Point:
