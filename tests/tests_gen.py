@@ -49,8 +49,12 @@ if __name__ == '__main__':
             insert_blocks(matrix, size)
             test_file.write(f'{random.choice(algorithms)}\n')
             test_file.write(f'{size}\n')
-            test_file.write(f'{get_point(matrix, size)[0]},{get_point(matrix, size)[1]}\n')
-            test_file.write(f'{get_point(matrix, size)[0]},{get_point(matrix, size)[1]}\n')
+            x1, y1 = get_point(matrix, size)
+            test_file.write(f'{x1},{y1}\n')
+            x2, y2 = get_point(matrix, size)
+            while x2 == x1 and y2 == 1:
+                x2, y2 = get_point(matrix, size)
+            test_file.write(f'{x2},{y2}\n')
             # parse_matrix(matrix)
             for row in matrix:
                 for col in row:

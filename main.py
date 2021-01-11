@@ -48,59 +48,61 @@ def run_algorithm(input_data):
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
 if __name__ == '__main__':
 
+    algorithms = ['UCS','ASTAR','IDS','IDASTAR','BIASTAR']
+
     wb = xlwt.Workbook()
-    sheet = wb.add_sheet('Stats')
+    for algorithm in algorithms:
+        stats_sheet = wb.add_sheet(f'{algorithm}_stats')
+        stats_sheet.write(0, 0, 'Problem')
+        stats_sheet.write(0, 1, 'Heuristic Name')
+        stats_sheet.write(0, 2, 'N')
+        stats_sheet.write(0, 3, 'd/N')
+        stats_sheet.write(0, 4, 'Success (Y/N)')
+        stats_sheet.write(0, 5, 'Time (sec)')
+        stats_sheet.write(0, 6, 'EBF')
+        stats_sheet.write(0, 7, 'Average H value')
+        stats_sheet.write(0, 8, 'Min Depth')
+        stats_sheet.write(0, 9, 'Avg Depth')
+        stats_sheet.write(0, 10, 'Max Depth')
 
-    sheet.write(0, 0, 'Problem')
-    sheet.write(0, 1, 'Heuristic Name')
-    sheet.write(0, 2, 'N')
-    sheet.write(0, 3, 'd/N')
-    sheet.write(0, 4, 'Success (Y/N)')
-    sheet.write(0, 5, 'Time (sec)')
-    sheet.write(0, 6, 'EBF')
-    sheet.write(0, 7, 'Average H value')
-    sheet.write(0, 8, 'Min Depth')
-    sheet.write(0, 9, 'Avg Depth')
-    sheet.write(0, 10, 'Max Depth')
+        path = os.path.dirname(__file__)
+        for i in range(20):
+            test_name = f"test_{i}.txt"
+            data = parse_input_file(os.path.join(path, test_name))
+            data.selected_algorithm = algorithm
+            legal, result = check_input(data)
 
-    path = os.path.dirname(__file__)
-    for i in range(20):
-        test_name = f"test_{i}.txt"
-        data = parse_input_file(os.path.join(path, test_name))
-        legal, result = check_input(data)
-
-        if legal is False:
-            if result is None:
-                # Start/end point coordinates are illegal
-                print("Invalid coordinates of start point or end point.")
+            if legal is False:
+                if result is None:
+                    # Start/end point coordinates are illegal
+                    print("Invalid coordinates of start point or end point.")
+                else:
+                    # Start point == End point
+                    print("Start Point == End Point")
+                    print(result)
             else:
-                # Start point == End point
-                print("Start Point == End Point")
-                print(result)
-
-        else:
-            if data.selected_algorithm == "IDASTAR":
-                continue
-            result = run_algorithm(data)
-            if result.successful:
-                result_file = f"test_{i}_results.txt"
-                with open(result_file, "w") as file:
-                    file.write(result.get_results())
-            result.problem = test_name
-            if data.selected_algorithm == "ASTAR" or data.selected_algorithm == "BIASTAR":
-                result.h_function="chebyshev"
-            current_row = i+1
-            success = 'Y' if result.successful else 'N'
-            sheet.write(current_row, 0, f'{result.problem}')
-            sheet.write(current_row, 1, f'{result.h_function}')
-            sheet.write(current_row, 2, f'{result.nodes_expanded}')
-            sheet.write(current_row, 3, f'{result.penetration}')
-            sheet.write(current_row, 4, f'{success}')
-            sheet.write(current_row, 5, f'{result.time}')
-            sheet.write(current_row, 6, f'{result.EBF}')
-            sheet.write(current_row, 7, f'{result.avg_H}')
-            sheet.write(current_row, 8, f'{result.min_depth}')
-            sheet.write(current_row, 9, f'{result.avg_depth}')
-            sheet.write(current_row, 10, f'{result.max_depth}')
-    wb.save('stats.xls')
+                current_row = i+1
+                if data.selected_algorithm == "IDASTAR":
+                    continue
+                result = run_algorithm(data)
+                if result.successful:
+                    result_file = f"{algorithm}_test_{i}_results.txt"
+                    with open(result_file, "w") as file:
+                        file.write(result.get_results())
+                result.problem = test_name
+                if data.selected_algorithm == "ASTAR" or data.selected_algorithm == "BIASTAR" or data.selected_algorithm == "BIASTAR":
+                    result.h_function="chebyshev"
+                success = 'Y' if result.successful else 'N'
+                stats_sheet.write(current_row, 0, f'{result.problem}')
+                stats_sheet.write(current_row, 1, f'{result.h_function}')
+                stats_sheet.write(current_row, 2, f'{result.nodes_expanded}')
+                stats_sheet.write(current_row, 3, f'{result.penetration}')
+                stats_sheet.write(current_row, 4, f'{success}')
+                stats_sheet.write(current_row, 5, f'{result.time}')
+                stats_sheet.write(current_row, 6, f'{result.EBF}')
+                stats_sheet.write(current_row, 7, f'{result.avg_H}')
+                stats_sheet.write(current_row, 8, f'{result.min_depth}')
+                stats_sheet.write(current_row, 9, f'{result.avg_depth}')
+                stats_sheet.write(current_row, 10, f'{result.max_depth}')
+        wb.save('statistics.xls')
 
