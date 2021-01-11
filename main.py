@@ -4,6 +4,7 @@ from dataStructures import DataInput, Point, StatsContainer
 from inputChecks import check_input
 import numpy
 import Heuristics
+from math import log2, sqrt
 import os.path
 import time
 
@@ -18,50 +19,74 @@ def parse_input_file(file_path: str) -> DataInput:
         return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix)
 
 
-def run_algorithm(input_data, time_limit):
+def run_algorithm(input_data, time_limit, start_time=0.0):
     if input_data.selected_algorithm == "UCS":
         import UCS
-        res = UCS.run(input_data, Heuristics.zero_heuristic, time_limit)
+        res = UCS.run(input_data, Heuristics.zero_heuristic, start_time, time_limit)
         print(res)
     elif input_data.selected_algorithm == "IDS":
         import IDS
-        res = IDS.run(input_data, time_limit)
+        res = IDS.run(input_data, start_time, time_limit)
         print(res)
     elif input_data.selected_algorithm == "ASTAR":
         import UCS
-        res = UCS.run(input_data, Heuristics.octile_distance, time_limit)
+        res = UCS.run(input_data, Heuristics.octile_distance, start_time, time_limit)
         print(res)
     elif input_data.selected_algorithm == "BIASTAR":
         import BI_Astar
-        res = BI_Astar.run(input_data, Heuristics.octile_distance, time_limit)
+        res = BI_Astar.run(input_data, Heuristics.octile_distance, start_time, time_limit)
         print(res)
     elif input_data.selected_algorithm == "IDASTAR":
         import IDAstar
-        print(IDAstar.run(input_data, Heuristics.octile_distance, StatsContainer()), time_limit)
+        res = IDAstar.run(input_data, Heuristics.octile_distance, StatsContainer(), start_time, time_limit)
+        print(res)
     else:
         raise Exception("something went wrong :(")
 
 
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
+def get_suggested_time_limit(data):
+    algo = data.selected_algorithm
+    if algo == "ASTAR" or algo == "UCS" or algo == "BIASTAR":
+        res = log2(data.matrix_size)
+    elif algo == "IDS":
+        res = sqrt(data.matrix_size)
+    else:
+        res = data.matrix_size / 2
+    return round(res, 2)
+
+
 if __name__ == '__main__':
-    runtime_limit = input("Please enter time limit for the program\n")
+    #___uncomment this when switching to I/O_______
+    # data = parse_input_file(input("Drag your file here:\n"))
+    # suggested_limit = get_suggested_time_limit(data)
+    # user_wants_to_set_new_time = input(
+    #     f'Suggested time limit for this file is: {suggested_limit}, would you like to enter a different time limit? (Y/N)\n')
+    # user_wants_to_set_new_time.upper()
+    # if user_wants_to_set_new_time == 'Y':
+    #     runtime_limit = input("Please enter a new time limit: \n")
+    # else:
+    #     runtime_limit = suggested_limit
+
+    #_____for testing_______
     path = os.path.dirname(__file__)
     test_name = "medium_test.txt"
+    start_time = time.process_time()
     data = parse_input_file(os.path.join(path, test_name))
     legal, result = check_input(data)
+    runtime_limit = 0
 
     if legal is False:
         if result is None:
             # Start/end point coordinates are illegal
-            print("Invalid coordinates of start point or end point.")
+            print("Error: Invalid coordinates of start point or end point.")
         else:
             if legal is True:
                 # Start point == End point
-                print("Start Point == End Point")
+                print("Start Point == End Point!\n")
                 print(result)
             else:
                 # Root Cost is -1
-                print("Root Cost is -1")
-                print(result)
+                print("Error: Root Cost is -1")
     else:
-        run_algorithm(data, runtime_limit)
+        run_algorithm(data, runtime_limit, start_time)

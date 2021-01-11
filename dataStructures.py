@@ -60,9 +60,6 @@ class StatsContainer:
         self.min_depth = min_depth
         self.max_depth = max_depth
 
-    def set_time(self, time):
-        self.time = time
-
 
 class AlgorithmResult:
     def __init__(self, final_path="", path_cost=0, nodes_expanded=0, penetration=0, successful=0, EBF=0.0, avg_H=0,
