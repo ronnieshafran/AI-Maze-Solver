@@ -3,7 +3,7 @@ import time
 from dataStructures import *
 from queue import LifoQueue
 from UCS import get_children
-from math import log2
+from math import sqrt
 from sys import maxsize
 
 
@@ -65,7 +65,9 @@ def update_stats_at_cutoff(current_node, min_depth, total_attempts, total_depth)
 
 
 def run(data: DataInput, start_time, total_runtime) -> AlgorithmResult:
-    total_runtime = total_runtime if total_runtime > 0 else round(log2(data.matrix_size), 2)
+    total_runtime = total_runtime if total_runtime > 0 else round(sqrt(data.matrix_size),2)
+    actual_start_time = time.process_time()
+        #round(sqrt(data.matrix_size), 2)
     current_search = None
     depth = 0
     remaining_nodes = True
@@ -74,7 +76,7 @@ def run(data: DataInput, start_time, total_runtime) -> AlgorithmResult:
     total_depth = 0
     min_depth = maxsize
     while remaining_nodes and not successful:
-        current_time = time.process_time()
+        current_time = time.process_time() - actual_start_time
         if current_time - start_time >= total_runtime:
             print("Out of time!")
             break
@@ -88,7 +90,7 @@ def run(data: DataInput, start_time, total_runtime) -> AlgorithmResult:
         min_depth = min_depth if current_search_result.min_depth >= min_depth else current_search_result.min_depth
         total_depth += current_search_result.avg_depth  # stored total_depth in avg_depth for DLS only instead of creating another field
     end_time = time.process_time()
-    runtime = round(end_time - start_time, 2)
+    runtime = round(end_time - actual_start_time, 2)
     result = current_search[0]
     result.set_time(runtime)
     result.min_depth = min_depth

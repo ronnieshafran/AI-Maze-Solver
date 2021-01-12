@@ -90,7 +90,7 @@ if __name__ == '__main__':
         total_success = total_h = total_nodes = total_penetration = total_time = total_ebf = total_mindepth = total_maxdepth = total_avgdepth = 0
 
         path = os.path.dirname(__file__)
-        for i in range(18):
+        for i in range(50):
             test_name = f"test_{i}.txt"
             data = parse_input_file(os.path.join(path, test_name))
             data.selected_algorithm = algorithm
@@ -106,8 +106,6 @@ if __name__ == '__main__':
                     print(result)
             else:
                 current_row = i + 1
-                if data.selected_algorithm == "IDASTAR":
-                    continue
                 result = run_algorithm(data, 0, 0)
                 if result.successful:
                     result_file = f"{algorithm}_test_{i}_results.txt"

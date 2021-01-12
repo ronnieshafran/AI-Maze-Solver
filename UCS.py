@@ -6,6 +6,7 @@ import time
 
 def run(data: DataInput, h_function, start_time, total_runtime=0) -> AlgorithmResult:
     total_runtime = total_runtime if total_runtime > 0 else round(log2(data.matrix_size), 2)
+    actual_start_time = time.process_time()
     # init variables
     open_list_queue = PriorityQueue()
     visited = {}
@@ -21,7 +22,7 @@ def run(data: DataInput, h_function, start_time, total_runtime=0) -> AlgorithmRe
     out_of_time = False
 
     while not open_list_queue.is_empty():
-        current_time = time.process_time()
+        current_time = time.process_time() - actual_start_time
         if current_time - start_time >= total_runtime:
             print("Out of time!")
             out_of_time = True
@@ -71,7 +72,7 @@ def run(data: DataInput, h_function, start_time, total_runtime=0) -> AlgorithmRe
     EBF, avg_depth, avg_h, min_depth, penetration = calc_final_stats(final_depth, max_depth, min_depth, total_attempts, total_depth,
                                                                      total_expanded_nodes, total_h)
     end_time = time.process_time()
-    total_runtime = round(end_time - start_time, 4)
+    total_runtime = round(end_time - actual_start_time, 2)
     if goal_node is not None:
         return AlgorithmResult(goal_node.path_to_node[:-1], goal_node.g_cost_of_path, total_expanded_nodes, penetration,
                                True,

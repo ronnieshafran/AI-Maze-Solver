@@ -6,6 +6,7 @@ from commonFunctions import *
 def run(data: DataInput, h_function, overall_stats: StatsContainer, start_time, run_time):
     if run_time == 0:
         run_time = data.matrix_size *3
+    actual_start_time = time.process_time()
     overall_stats.start_time = time.process_time()
     overall_stats.min_depth = data.matrix_size ** 2
     result = AlgorithmResult()
@@ -15,13 +16,13 @@ def run(data: DataInput, h_function, overall_stats: StatsContainer, start_time, 
         old_f_limit = f_limit
         goal, f_limit, overall_stats = dfs_contour(data, root, f_limit, h_function, overall_stats, root.heuristic_value)
         # failed to adhere to run time limitation
-        if time.process_time() - start_time >= run_time:
-            overall_stats.end_time = time.process_time()
+        if time.process_time() - actual_start_time >= run_time:
+            overall_stats.end_time = time.process_time() - actual_start_time
             result.accumulate_stats(overall_stats)
             result.successful = False
             return result
         if goal is not None or f_limit == sys.maxsize:
-            overall_stats.end_time = time.process_time()
+            overall_stats.end_time = time.process_time() - actual_start_time
             result.accumulate_stats(overall_stats)
             if result.min_depth == data.matrix_size ** 2:
                 result.min_depth = result.max_depth

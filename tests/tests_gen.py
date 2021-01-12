@@ -41,7 +41,7 @@ def get_point(matrix, size):
 
 if __name__ == '__main__':
     algorithms = ["UCS", "IDS", "ASTAR", "BIASTAR", "IDASTAR"]
-    for i in range(18):
+    for i in range(50):
         file_name = f"test_{i}.txt"
         with open(file_name, "w") as test_file:
             size = random.randint(15, 45)
