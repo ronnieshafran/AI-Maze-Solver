@@ -7,7 +7,7 @@ from math import log2
 from sys import maxsize
 
 
-def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> (AlgorithmResult, bool):
+def DLS(matrix, matrix_size, start_point, end_point, search_depth, min_value) -> (AlgorithmResult, bool):
     stack = LifoQueue()
     observed_points_set = set()  # meant to avoid observing the same node twice if two nodes led to it
     total_expanded_nodes = 0
@@ -39,7 +39,7 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth) -> (Algorithm
 
         total_expanded_nodes += 1
         observed_points_set.add(current_node.coordinates)
-        children_nodes = get_children(current_node, matrix)
+        children_nodes = get_children(current_node, matrix, min_value=min_value)
         children_nodes.reverse() # reverse order to maintain correct expansion pattern
         if len(children_nodes) == 0:
             min_depth, total_depth = update_stats_at_cutoff(current_node, min_depth, total_attempts, total_depth)
@@ -79,7 +79,7 @@ def run(data: DataInput, start_time, total_runtime) -> AlgorithmResult:
             print("Out of time!")
             break
         # current_search returns tuple: (AlgorithmResult result, boolean remaining)
-        current_search = DLS(data.matrix, data.matrix_size, data.start_point, data.end_point, depth)
+        current_search = DLS(data.matrix, data.matrix_size, data.start_point, data.end_point, depth, data.min)
         current_search_result = current_search[0]
         successful = current_search_result.successful
         remaining_nodes = current_search[1]
