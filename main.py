@@ -33,30 +33,27 @@ def run_algorithm(input_data, time_limit, start_time=0.0):
     if input_data.selected_algorithm == "UCS":
         import UCS
         res = UCS.run(input_data, Heuristics.zero_heuristic, start_time, time_limit)
-        print(res)
+
     elif input_data.selected_algorithm == "IDS":
         import IDS
         res = IDS.run(input_data, start_time, time_limit)
-        print(res)
+
     elif input_data.selected_algorithm == "ASTAR":
         import UCS
         res = UCS.run(input_data, h_func, start_time, time_limit)
-        print(res)
+
     elif input_data.selected_algorithm == "BIASTAR":
         import BI_Astar
         res = BI_Astar.run(input_data, h_func, start_time, time_limit)
-        print(res)
+
     elif input_data.selected_algorithm == "IDASTAR":
         import IDAstar
         res = IDAstar.run(input_data, h_func, StatsContainer(), start_time, time_limit)
-        print(res)
+
     if res is None:
         print("Incorrect algorithm name")
         return
-    file_name = f'{input_data.selected_algorithm}_latest_test_results.txt'
-    with open(file_name, "w") as result_file:
-        result_file.write(res.__str__())
-        print(f"Result File Created: {file_name}")
+    return res
 
 
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
@@ -74,7 +71,7 @@ def get_suggested_time_limit(data):
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
 if __name__ == '__main__':
 
-    algorithms = ['UCS','ASTAR','IDS','IDASTAR','BIASTAR']
+    algorithms = ['UCS', 'ASTAR', 'IDS', 'IDASTAR']
 
     wb = xlwt.Workbook()
     for algorithm in algorithms:
@@ -90,9 +87,10 @@ if __name__ == '__main__':
         stats_sheet.write(0, 8, 'Min Depth')
         stats_sheet.write(0, 9, 'Avg Depth')
         stats_sheet.write(0, 10, 'Max Depth')
+        total_success = total_h = total_nodes = total_penetration = total_time = total_ebf = total_mindepth = total_maxdepth = total_avgdepth = 0
 
         path = os.path.dirname(__file__)
-        for i in range(20):
+        for i in range(18):
             test_name = f"test_{i}.txt"
             data = parse_input_file(os.path.join(path, test_name))
             data.selected_algorithm = algorithm
@@ -107,18 +105,29 @@ if __name__ == '__main__':
                     print("Start Point == End Point")
                     print(result)
             else:
-                current_row = i+1
+                current_row = i + 1
                 if data.selected_algorithm == "IDASTAR":
                     continue
-                result = run_algorithm(data)
+                result = run_algorithm(data, 0, 0)
                 if result.successful:
                     result_file = f"{algorithm}_test_{i}_results.txt"
                     with open(result_file, "w") as file:
                         file.write(result.get_results())
                 result.problem = test_name
-                if data.selected_algorithm == "ASTAR" or data.selected_algorithm == "BIASTAR" or data.selected_algorithm == "BIASTAR":
-                    result.h_function="chebyshev"
+                if data.selected_algorithm == "ASTAR" or data.selected_algorithm == "IDASTAR" or data.selected_algorithm == "BIASTAR":
+                    result.h_function = "chebyshev"
                 success = 'Y' if result.successful else 'N'
+                if result.successful:
+                    total_success += 1
+                    total_h += result.avg_H
+                    total_time += result.time
+                    total_nodes += result.nodes_expanded
+                    total_ebf += result.EBF
+                    total_maxdepth += result.max_depth
+                    total_avgdepth += result.avg_depth
+                    total_mindepth += result.min_depth
+                    total_penetration += result.penetration
+
                 stats_sheet.write(current_row, 0, f'{result.problem}')
                 stats_sheet.write(current_row, 1, f'{result.h_function}')
                 stats_sheet.write(current_row, 2, f'{result.nodes_expanded}')
@@ -130,5 +139,28 @@ if __name__ == '__main__':
                 stats_sheet.write(current_row, 8, f'{result.min_depth}')
                 stats_sheet.write(current_row, 9, f'{result.avg_depth}')
                 stats_sheet.write(current_row, 10, f'{result.max_depth}')
-        wb.save('statistics.xls')
+        stats_sheet.write(22, 0, "Totals and Averages")
+        stats_sheet.write(22, 1, "Total Success:")
+        stats_sheet.write(22, 2, "Average N")
+        stats_sheet.write(22, 3, "Average H")
+        stats_sheet.write(22, 4, "Average Time")
+        stats_sheet.write(22, 5, "Average d/N")
+        stats_sheet.write(22, 6, "Average Min Depth")
+        stats_sheet.write(22, 7, "Average average Depth")
+        stats_sheet.write(22, 8, "Average Max Depth")
+        stats_sheet.write(22, 9, "Average EBF")
 
+        if total_success == 0:
+            total_h = total_nodes = total_penetration = total_time = total_ebf = total_mindepth = total_maxdepth = total_avgdepth = 0
+            total_success = 1
+
+        stats_sheet.write(23, 1, total_success)
+        stats_sheet.write(23, 2, total_nodes / total_success)
+        stats_sheet.write(23, 3, total_h / total_success)
+        stats_sheet.write(23, 4, total_time / total_success)
+        stats_sheet.write(23, 5, total_penetration / total_success)
+        stats_sheet.write(23, 6, total_mindepth / total_success)
+        stats_sheet.write(23, 7, total_avgdepth / total_success)
+        stats_sheet.write(23, 8, total_maxdepth / total_success)
+        stats_sheet.write(23, 9, total_ebf / total_success)
+        wb.save('statistics.xls')

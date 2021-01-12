@@ -6,11 +6,11 @@ def generate_random_matrix(size):
 
 
 def get_rows_and_cols(size):
-    return random.randint(0, size - 1), random.randint(0, size - 1)
+    return random.randint(1, size - 1), random.randint(0, size - 1)
 
 
 def insert_blocks(matrix, size):
-    number_of_blocks = random.randint(1, (size ** 2) / 2)
+    number_of_blocks = random.randint(size, (size ** 2) / 2)
     while number_of_blocks != 0:
         rows, cols = get_rows_and_cols(size)
         if matrix[rows][cols] == -1:
@@ -41,18 +41,20 @@ def get_point(matrix, size):
 
 if __name__ == '__main__':
     algorithms = ["UCS", "IDS", "ASTAR", "BIASTAR", "IDASTAR"]
-    for i in range(20):
+    for i in range(18):
         file_name = f"test_{i}.txt"
         with open(file_name, "w") as test_file:
-            size = random.randint(5, 8)
+            size = random.randint(15, 45)
             matrix = generate_random_matrix(size)
             insert_blocks(matrix, size)
             test_file.write(f'{random.choice(algorithms)}\n')
             test_file.write(f'{size}\n')
             x1, y1 = get_point(matrix, size)
+            while matrix[x1][y1] == -1:
+                x1, y1 = get_point(matrix, size)
             test_file.write(f'{x1},{y1}\n')
             x2, y2 = get_point(matrix, size)
-            while x2 == x1 and y2 == 1:
+            while (x2 == x1 and y2 == 1) or matrix[x2][y2] == -1:
                 x2, y2 = get_point(matrix, size)
             test_file.write(f'{x2},{y2}\n')
             # parse_matrix(matrix)
