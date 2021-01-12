@@ -3,7 +3,7 @@ import time
 from commonFunctions import *
 
 
-def run(data: DataInput, h_function) -> AlgorithmResult:
+def run(data: DataInput, h_function,start_time, time_limit) -> AlgorithmResult:
     start_time = time.process_time()
     forward_open_queue = PriorityQueue()
     backward_open_queue = PriorityQueue()
