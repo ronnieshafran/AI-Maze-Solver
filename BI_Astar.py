@@ -3,7 +3,7 @@ import time
 from commonFunctions import *
 
 
-def run(data: DataInput, h_function) -> AlgorithmResult:
+def run(data: DataInput, h_function, start_time, time_limit) -> AlgorithmResult:
     start_time = time.process_time()
     forward_open_queue = PriorityQueue()
     backward_open_queue = PriorityQueue()
@@ -42,7 +42,7 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
             break
 
         forward_visited |= {current_forward_node.coordinates: current_forward_node}
-        forward_nodes_to_enqueue = get_children(current_forward_node, data.matrix, h_function, data.end_point)
+        forward_nodes_to_enqueue = get_children(current_forward_node, data.matrix, h_function, data.end_point, data.min)
 
         # check for min depth when the search path is "stuck"
         if len(forward_nodes_to_enqueue) == 0 and min_depth > current_forward_node.depth:
@@ -69,7 +69,7 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
         total_depth += goal.depth - current_backward_node.depth
         total_h += current_backward_node.heuristic_value
         backward_visited |= {current_backward_node.coordinates: current_backward_node}
-        backward_nodes_to_enqueue = get_children(current_backward_node, data.matrix, h_function, data.start_point)
+        backward_nodes_to_enqueue = get_children(current_backward_node, data.matrix, h_function, data.start_point, data.min)
         if len(backward_nodes_to_enqueue) == 0 and min_depth > goal.depth - current_backward_node.depth:
             min_depth = goal.depth - current_backward_node.depth
         else:
@@ -134,6 +134,26 @@ def find_optimal_path(forward: Node(), backward: Node(), visited_forward: {}, vi
 
     for node in open_forward:
         forward_node = open_forward[node]
+        if node in open_backward:
+            backward_node = open_backward.get(node)
+            g_cost_forward = forward_node.g_cost_of_path
+            g_cost_backward = backward_node.g_cost_of_path
+            if g_cost_backward + g_cost_forward - backward_node.cost < min_val:
+                min_val = g_cost_backward + g_cost_forward - backward_node.cost
+                optimal_path = (forward_node, backward_node)
+
+    for node in open_forward:
+        forward_node = open_forward[node]
+        if node in visited_backward:
+            backward_node = visited_backward.get(node)
+            g_cost_forward = forward_node.g_cost_of_path
+            g_cost_backward = backward_node.g_cost_of_path
+            if g_cost_backward + g_cost_forward - backward_node.cost < min_val:
+                min_val = g_cost_backward + g_cost_forward - backward_node.cost
+                optimal_path = (forward_node, backward_node)
+
+    for node in visited_forward:
+        forward_node = visited_forward[node]
         if node in open_backward:
             backward_node = open_backward.get(node)
             g_cost_forward = forward_node.g_cost_of_path

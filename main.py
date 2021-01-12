@@ -4,8 +4,12 @@ from dataStructures import DataInput, Point, StatsContainer
 from inputChecks import check_input
 import numpy
 import Heuristics
+from math import log2, sqrt
+from Heuristics import euclidean_distance as h_func
 import os.path
 import xlwt
+import time
+from sys import maxsize
 
 
 def parse_input_file(file_path: str) -> DataInput:
@@ -15,34 +19,56 @@ def parse_input_file(file_path: str) -> DataInput:
         start_point = Point([int(num) for num in file.readline().split(',')])
         end_point = Point([int(num) for num in file.readline().split(',')])
         matrix = numpy.array([[float(num) for num in line.split(',')] for line in file.readlines()])
-        return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix)
+        min_value = maxsize
+        for row in matrix:
+            row_list = [i for i in row if i > 0]
+            if len(row_list) > 0:
+                row_min = min([i for i in row if i > 0])
+                min_value = min(min_value, row_min)
+        return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix, min_value)
 
 
-def run_algorithm(input_data):
+def run_algorithm(input_data, time_limit, start_time=0.0):
     res = None
     if input_data.selected_algorithm == "UCS":
         import UCS
-        res = UCS.run(input_data, Heuristics.zero_heuristic)
-        # print(res)
+        res = UCS.run(input_data, Heuristics.zero_heuristic, start_time, time_limit)
+        print(res)
     elif input_data.selected_algorithm == "IDS":
         import IDS
-        res = IDS.run(input_data)
-        # print(res)
+        res = IDS.run(input_data, start_time, time_limit)
+        print(res)
     elif input_data.selected_algorithm == "ASTAR":
         import UCS
-        res = UCS.run(input_data, Heuristics.octile_distance)
-        # print(res)
+        res = UCS.run(input_data, h_func, start_time, time_limit)
+        print(res)
     elif input_data.selected_algorithm == "BIASTAR":
         import BI_Astar
-        res = BI_Astar.run(input_data, Heuristics.octile_distance)
-        # print(res)
+        res = BI_Astar.run(input_data, h_func, start_time, time_limit)
+        print(res)
     elif input_data.selected_algorithm == "IDASTAR":
         import IDAstar
-        res = IDAstar.run(input_data, Heuristics.octile_distance, StatsContainer())
-        # print(res)
+        res = IDAstar.run(input_data, h_func, StatsContainer(), start_time, time_limit)
+        print(res)
+    if res is None:
+        print("Incorrect algorithm name")
+        return
+    file_name = f'{input_data.selected_algorithm}_latest_test_results.txt'
+    with open(file_name, "w") as result_file:
+        result_file.write(res.__str__())
+        print(f"Result File Created: {file_name}")
+
+
+# TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
+def get_suggested_time_limit(data):
+    algo = data.selected_algorithm
+    if algo == "ASTAR" or algo == "UCS" or algo == "BIASTAR":
+        res = log2(data.matrix_size)
+    elif algo == "IDS":
+        res = sqrt(data.matrix_size)
     else:
-        raise Exception("something went wrong :(")
-    return res
+        res = data.matrix_size / 2
+    return round(res, 2)
 
 
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N

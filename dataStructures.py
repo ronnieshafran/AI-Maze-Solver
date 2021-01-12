@@ -17,7 +17,9 @@ class PriorityQueue:
     def is_empty(self):
         return len(self._queue) == 0
 
-
+    @property
+    def queue(self):
+        return self._queue
 
 
 class Point:
@@ -32,19 +34,20 @@ class Point:
             return False
 
     def __key(self):
-        return (self.x, self.y)
+        return self.x, self.y
 
     def __hash__(self):
         return hash(self.__key())
 
 
 class DataInput:
-    def __init__(self, selected_algorithm, matrix_size, start_point, end_point, matrix):
+    def __init__(self, selected_algorithm, matrix_size, start_point, end_point, matrix, min_value):
         self.matrix = matrix
         self.end_point = end_point
         self.start_point = start_point
         self.matrix_size = matrix_size
         self.selected_algorithm = selected_algorithm
+        self.min = min_value
 
 
 class StatsContainer:
@@ -57,9 +60,6 @@ class StatsContainer:
         self.total_h = total_h
         self.min_depth = min_depth
         self.max_depth = max_depth
-
-    def set_time(self, time):
-        self.time = time
 
 
 class AlgorithmResult:
@@ -105,7 +105,7 @@ class AlgorithmResult:
                f'***FOR INFORMED SEARCHES: \n' \
                f'EBF: {self.EBF} \n' \
                f'avg H: {self.avg_H} \n' \
-               f'penetration: {self.penetration} \n' \
+               f'dN: {self.penetration} \n' \
                f'runtime: {self.time}'
 
     def set_time(self, time):
