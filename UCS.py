@@ -1,6 +1,7 @@
 from commonFunctions import *
 from sys import maxsize
 from math import log2
+import time
 
 
 def run(data: DataInput, h_function, start_time, total_runtime=0) -> AlgorithmResult:

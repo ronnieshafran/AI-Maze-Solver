@@ -55,6 +55,7 @@ def run_algorithm(input_data, time_limit, start_time=0.0):
     file_name = f'{input_data.selected_algorithm}_latest_test_results.txt'
     with open(file_name, "w") as result_file:
         result_file.write(res.__str__())
+        print(f"Result File Created: {file_name}")
 
 
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
@@ -82,9 +83,9 @@ if __name__ == '__main__':
     else:
         runtime_limit = suggested_limit
 
-    # _____for testing____ #
+    # # _____for testing____ #
     # path = os.path.dirname(__file__)
-    # test_name = "medium_test.txt"
+    # test_name = "spiral_test.txt"
     # data = parse_input_file(os.path.join(path, test_name))
     # runtime_limit = 0
 
@@ -104,3 +105,4 @@ if __name__ == '__main__':
                 print("Error: Root Cost is -1")
     else:
         run_algorithm(data, runtime_limit, start_time)
+        input("Press Enter To Close...")
