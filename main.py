@@ -5,8 +5,10 @@ from inputChecks import check_input
 import numpy
 import Heuristics
 from math import log2, sqrt
+from Heuristics import manhattan_avg as h_func
 import os.path
 import time
+from sys import maxsize
 
 
 def parse_input_file(file_path: str) -> DataInput:
@@ -16,6 +18,10 @@ def parse_input_file(file_path: str) -> DataInput:
         start_point = Point([int(num) for num in file.readline().split(',')])
         end_point = Point([int(num) for num in file.readline().split(',')])
         matrix = numpy.array([[float(num) for num in line.split(',')] for line in file.readlines()])
+        min_value = maxsize
+        for row in matrix:
+            row_min = min([i for i in row if i > 0])
+            min_value = min(min_value,row_min)
         return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix)
 
 
@@ -30,15 +36,15 @@ def run_algorithm(input_data, time_limit, start_time=0.0):
         print(res)
     elif input_data.selected_algorithm == "ASTAR":
         import UCS
-        res = UCS.run(input_data, Heuristics.octile_distance, start_time, time_limit)
+        res = UCS.run(input_data, h_func, start_time, time_limit)
         print(res)
     elif input_data.selected_algorithm == "BIASTAR":
         import BI_Astar
-        res = BI_Astar.run(input_data, Heuristics.octile_distance, start_time, time_limit)
+        res = BI_Astar.run(input_data, h_func, start_time, time_limit)
         print(res)
     elif input_data.selected_algorithm == "IDASTAR":
         import IDAstar
-        res = IDAstar.run(input_data, Heuristics.octile_distance, StatsContainer(), start_time, time_limit)
+        res = IDAstar.run(input_data, h_func, StatsContainer(), start_time, time_limit)
         print(res)
     else:
         raise Exception("something went wrong :(")
@@ -57,7 +63,7 @@ def get_suggested_time_limit(data):
 
 
 if __name__ == '__main__':
-    #___uncomment this when switching to I/O_______
+    # ___uncomment this when switching to I/O_______
     # data = parse_input_file(input("Drag your file here:\n"))
     # suggested_limit = get_suggested_time_limit(data)
     # user_wants_to_set_new_time = input(
@@ -68,7 +74,7 @@ if __name__ == '__main__':
     # else:
     #     runtime_limit = suggested_limit
 
-    #_____for testing_______
+    # _____for testing_______
     path = os.path.dirname(__file__)
     test_name = "medium_test.txt"
     start_time = time.process_time()

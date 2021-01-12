@@ -15,6 +15,7 @@ def run(data: DataInput, h_function, overall_stats: StatsContainer, start_time, 
     root = Node(data.start_point, data.matrix[data.start_point.x][data.start_point.y])
     f_limit = h_function(root.coordinates, data.end_point)
     while 1:
+        old_f_limit = f_limit
         goal, f_limit, overall_stats = dfs_contour(data, root, f_limit, h_function, overall_stats, root.heuristic_value)
         # failed to adhere to run time limitation
         if time.process_time() - start_time >= run_time:
@@ -32,6 +33,7 @@ def run(data: DataInput, h_function, overall_stats: StatsContainer, start_time, 
                 result.path_cost = goal.g_cost_of_path
                 result.successful = True
             return result
+        f_limit = max(old_f_limit+1, f_limit)
 
 
 def dfs_contour(data: DataInput, node, f_limit, h_function, stats: StatsContainer, const_fix):
