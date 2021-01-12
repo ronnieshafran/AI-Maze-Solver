@@ -72,22 +72,22 @@ def get_suggested_time_limit(data):
 
 if __name__ == '__main__':
 
-    # ___uncomment this when switching to I/O___ #
-    data = parse_input_file(input("Drag your file here:\n"))
-    suggested_limit = get_suggested_time_limit(data)
-    user_wants_to_set_new_time = input(
-        f'Suggested time limit for this file is: {suggested_limit}, would you like to enter a different time limit? (Y/N)\n')
-    user_wants_to_set_new_time.upper()
-    if user_wants_to_set_new_time == 'Y':
-        runtime_limit = input("Please enter a new time limit: \n")
-    else:
-        runtime_limit = suggested_limit
+    # # ___uncomment this when switching to I/O___ #
+    # data = parse_input_file(input("Drag your file here:\n"))
+    # suggested_limit = get_suggested_time_limit(data)
+    # user_wants_to_set_new_time = input(
+    #     f'Suggested time limit for this file is: {suggested_limit}, would you like to enter a different time limit? (Y/N)\n')
+    # user_wants_to_set_new_time.upper()
+    # if user_wants_to_set_new_time == 'Y':
+    #     runtime_limit = input("Please enter a new time limit: \n")
+    # else:
+    #     runtime_limit = suggested_limit
 
-    # # _____for testing____ #
-    # path = os.path.dirname(__file__)
-    # test_name = "spiral_test.txt"
-    # data = parse_input_file(os.path.join(path, test_name))
-    # runtime_limit = 0
+    # _____for testing____ #
+    path = os.path.dirname(__file__)
+    test_name = "wall_with_gap_test.txt"
+    data = parse_input_file(os.path.join(path, test_name))
+    runtime_limit = 0
 
     start_time = time.process_time()
     legal, result = check_input(data)
