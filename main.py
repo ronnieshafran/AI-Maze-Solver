@@ -28,6 +28,7 @@ def parse_input_file(file_path: str) -> DataInput:
 
 
 def run_algorithm(input_data, time_limit, start_time=0.0):
+    res = None
     if input_data.selected_algorithm == "UCS":
         import UCS
         res = UCS.run(input_data, Heuristics.zero_heuristic, start_time, time_limit)
@@ -48,8 +49,12 @@ def run_algorithm(input_data, time_limit, start_time=0.0):
         import IDAstar
         res = IDAstar.run(input_data, h_func, StatsContainer(), start_time, time_limit)
         print(res)
-    file_name = f'{input_data.selected_algorithm}_latest_test.txt'
-    with open(file_name,a)
+    if res is None:
+        print("Incorrect algorithm name")
+        return
+    file_name = f'{input_data.selected_algorithm}_latest_test_results.txt'
+    with open(file_name,"w") as result_file:
+        result_file.write(res.__str__())
 
 
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
@@ -79,7 +84,7 @@ if __name__ == '__main__':
 
     # _____for testing_______
     path = os.path.dirname(__file__)
-    test_name = "spiral_test.txt"
+    test_name = "medium_test.txt"
     start_time = time.process_time()
     data = parse_input_file(os.path.join(path, test_name))
     legal, result = check_input(data)

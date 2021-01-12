@@ -103,7 +103,7 @@ class AlgorithmResult:
                f'***FOR INFORMED SEARCHES: \n' \
                f'EBF: {self.EBF} \n' \
                f'avg H: {self.avg_H} \n' \
-               f'penetration: {self.penetration} \n' \
+               f'dN: {self.penetration} \n' \
                f'runtime: {self.time}'
 
     def set_time(self, time):
