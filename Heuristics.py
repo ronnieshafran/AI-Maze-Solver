@@ -5,7 +5,7 @@ from math import floor
 def euclidean_distance(node_coordinates, end_point):
     x_delta = end_point.x - node_coordinates.x
     y_delta = end_point.y - node_coordinates.y
-    return sqrt(x_delta ** 2 + y_delta ** 2)
+    return sqrt(x_delta ** 2 + y_delta ** 2) / sqrt(2)
 
 
 def manhattan_distance(node_coordinates, end_point):
@@ -19,6 +19,10 @@ def manhattan_avg(node_coordinates, end_point):
     y_delta = abs(end_point.y - node_coordinates.y)
     return floor((x_delta + y_delta) / 2)
 
+def chebyshev_distance(node_coordinates, end_point):
+    x_delta = abs(end_point.x - node_coordinates.x)
+    y_delta = abs(end_point.y - node_coordinates.y)
+    return max(x_delta,y_delta)
 
 def octile_distance(node_coordinates, end_point):
     x_delta = abs(end_point.x - node_coordinates.x)

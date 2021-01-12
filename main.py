@@ -5,7 +5,7 @@ from inputChecks import check_input
 import numpy
 import Heuristics
 from math import log2, sqrt
-from Heuristics import manhattan_avg as h_func
+from Heuristics import chebyshev_distance as h_func
 import os.path
 import time
 from sys import maxsize
