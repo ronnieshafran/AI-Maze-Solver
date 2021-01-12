@@ -40,7 +40,7 @@ def DLS(matrix, matrix_size, start_point, end_point, search_depth, min_value) ->
         total_expanded_nodes += 1
         observed_points_set.add(current_node.coordinates)
         children_nodes = get_children(current_node, matrix, min_value=min_value)
-        children_nodes.reverse() # reverse order to maintain correct expansion pattern
+        children_nodes.reverse()  # reverse order to maintain correct expansion pattern
         if len(children_nodes) == 0:
             min_depth, total_depth = update_stats_at_cutoff(current_node, min_depth, total_attempts, total_depth)
 

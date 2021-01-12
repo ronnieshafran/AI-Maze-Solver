@@ -34,7 +34,7 @@ class Point:
             return False
 
     def __key(self):
-        return (self.x, self.y)
+        return self.x, self.y
 
     def __hash__(self):
         return hash(self.__key())

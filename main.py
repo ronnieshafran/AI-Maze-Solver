@@ -23,8 +23,8 @@ def parse_input_file(file_path: str) -> DataInput:
             row_list = [i for i in row if i > 0]
             if len(row_list) > 0:
                 row_min = min([i for i in row if i > 0])
-                min_value = min(min_value,row_min)
-        return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix,min_value)
+                min_value = min(min_value, row_min)
+        return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix, min_value)
 
 
 def run_algorithm(input_data, time_limit, start_time=0.0):
@@ -53,7 +53,7 @@ def run_algorithm(input_data, time_limit, start_time=0.0):
         print("Incorrect algorithm name")
         return
     file_name = f'{input_data.selected_algorithm}_latest_test_results.txt'
-    with open(file_name,"w") as result_file:
+    with open(file_name, "w") as result_file:
         result_file.write(res.__str__())
 
 
@@ -71,25 +71,25 @@ def get_suggested_time_limit(data):
 
 if __name__ == '__main__':
 
-    # ___uncomment this when switching to I/O_______
-    # data = parse_input_file(input("Drag your file here:\n"))
-    # suggested_limit = get_suggested_time_limit(data)
-    # user_wants_to_set_new_time = input(
-    #     f'Suggested time limit for this file is: {suggested_limit}, would you like to enter a different time limit? (Y/N)\n')
-    # user_wants_to_set_new_time.upper()
-    # if user_wants_to_set_new_time == 'Y':
-    #     runtime_limit = input("Please enter a new time limit: \n")
-    # else:
-    #     runtime_limit = suggested_limit
+    # ___uncomment this when switching to I/O___ #
+    data = parse_input_file(input("Drag your file here:\n"))
+    suggested_limit = get_suggested_time_limit(data)
+    user_wants_to_set_new_time = input(
+        f'Suggested time limit for this file is: {suggested_limit}, would you like to enter a different time limit? (Y/N)\n')
+    user_wants_to_set_new_time.upper()
+    if user_wants_to_set_new_time == 'Y':
+        runtime_limit = input("Please enter a new time limit: \n")
+    else:
+        runtime_limit = suggested_limit
 
-    # _____for testing_______
-    path = os.path.dirname(__file__)
-    test_name = "medium_test.txt"
+    # _____for testing____ #
+    # path = os.path.dirname(__file__)
+    # test_name = "medium_test.txt"
+    # data = parse_input_file(os.path.join(path, test_name))
+    # runtime_limit = 0
+
     start_time = time.process_time()
-    data = parse_input_file(os.path.join(path, test_name))
     legal, result = check_input(data)
-    runtime_limit = 0
-
     if legal is False:
         if result is None:
             # Start/end point coordinates are illegal

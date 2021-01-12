@@ -1,6 +1,3 @@
-from dataStructures import *
-from Heuristics import *
-from numpy import ndarray
 import time
 import sys
 from commonFunctions import *

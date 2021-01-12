@@ -1,7 +1,6 @@
 from dataStructures import *
 from Heuristics import *
 from numpy import ndarray
-import time
 
 
 def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray, h_function, end_point, min_value) -> Node:
@@ -48,7 +47,7 @@ def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray, h_
         return Node()
 
 
-def get_children(node, matrix, h_function=zero_heuristic, end_point=Point([0, 0]), min_value = 1):
+def get_children(node, matrix, h_function=zero_heuristic, end_point=Point([0, 0]), min_value=1):
     children = []
     directions = ("RU", "R", "RD", "D", "LD", "L", "LU", "U")
     for direction in directions:

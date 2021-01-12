@@ -3,7 +3,7 @@ import time
 from commonFunctions import *
 
 
-def run(data: DataInput, h_function,start_time, time_limit) -> AlgorithmResult:
+def run(data: DataInput, h_function, start_time, time_limit) -> AlgorithmResult:
     start_time = time.process_time()
     forward_open_queue = PriorityQueue()
     backward_open_queue = PriorityQueue()
@@ -151,7 +151,6 @@ def find_optimal_path(forward: Node(), backward: Node(), visited_forward: {}, vi
             if g_cost_backward + g_cost_forward - backward_node.cost < min_val:
                 min_val = g_cost_backward + g_cost_forward - backward_node.cost
                 optimal_path = (forward_node, backward_node)
-
 
     for node in visited_forward:
         forward_node = visited_forward[node]
