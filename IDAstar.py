@@ -13,7 +13,7 @@ def run(data: DataInput, h_function, overall_stats: StatsContainer, start_time, 
     overall_stats.min_depth = data.matrix_size ** 2
     result = AlgorithmResult()
     root = Node(data.start_point, data.matrix[data.start_point.x][data.start_point.y])
-    f_limit = h_function(root.coordinates, data.end_point)
+    f_limit = h_function(root.coordinates, data.end_point, data.min)
     while 1:
         old_f_limit = f_limit
         goal, f_limit, overall_stats = dfs_contour(data, root, f_limit, h_function, overall_stats, root.heuristic_value)
@@ -33,7 +33,7 @@ def run(data: DataInput, h_function, overall_stats: StatsContainer, start_time, 
                 result.path_cost = goal.g_cost_of_path
                 result.successful = True
             return result
-        f_limit = max(old_f_limit+1, f_limit)
+        f_limit = max(old_f_limit+data.min, f_limit)
 
 
 def dfs_contour(data: DataInput, node, f_limit, h_function, stats: StatsContainer, const_fix):
@@ -48,7 +48,7 @@ def dfs_contour(data: DataInput, node, f_limit, h_function, stats: StatsContaine
     if node.coordinates == data.end_point:
         return node, f_limit, stats
 
-    successors = get_children(node, data.matrix, h_function, data.end_point)
+    successors = get_children(node, data.matrix, h_function, data.end_point,data.min)
     if len(successors) != 0:
         stats.total_nodes_expanded += 1
         stats.total_h += node.heuristic_value

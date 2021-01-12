@@ -4,7 +4,7 @@ from numpy import ndarray
 import time
 
 
-def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray, h_function, end_point) -> Node:
+def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray, h_function, end_point, min_value) -> Node:
     next_node_coordinates = None
     next_node_value = None
     try:
@@ -35,7 +35,7 @@ def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray, h_
         # verify it's not a wall or out of bounds
         if next_node_coordinates.x < 0 or next_node_coordinates.y < 0 or next_node_value < 0:
             return Node()
-        next_node_h_value = h_function(next_node_coordinates, end_point)
+        next_node_h_value = h_function(next_node_coordinates, end_point, min_value)
         list_of_cords = parent_node.list_of_cords[:]
         list_of_cords.append(parent_node.coordinates)
         return Node(coordinates=next_node_coordinates, cost=next_node_value,
@@ -48,11 +48,11 @@ def get_node_in_direction(parent_node: Node, direction: str, matrix: ndarray, h_
         return Node()
 
 
-def get_children(node, matrix, h_function=zero_heuristic, end_point=Point([0, 0])):
+def get_children(node, matrix, h_function=zero_heuristic, end_point=Point([0, 0]), min_value = 1):
     children = []
     directions = ("RU", "R", "RD", "D", "LD", "L", "LU", "U")
     for direction in directions:
-        current_node = get_node_in_direction(node, direction, matrix, h_function, end_point)
+        current_node = get_node_in_direction(node, direction, matrix, h_function, end_point, min_value)
         if current_node.coordinates in node.list_of_cords:
             continue
         if current_node.cost > 0:

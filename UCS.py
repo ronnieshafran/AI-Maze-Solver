@@ -39,7 +39,7 @@ def run(data: DataInput, h_function, start_time, total_runtime=0) -> AlgorithmRe
             break
 
         visited |= {current_node.coordinates: current_node.f_cost_of_path}
-        nodes_to_enqueue = [child for child in get_children(current_node, data.matrix, h_function, data.end_point) if
+        nodes_to_enqueue = [child for child in get_children(current_node, data.matrix, h_function, data.end_point, data.min) if
                             child.coordinates not in current_node.list_of_cords]
         nodes_enqueued = 0
         # cutoff

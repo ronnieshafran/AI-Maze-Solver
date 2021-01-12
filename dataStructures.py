@@ -41,12 +41,13 @@ class Point:
 
 
 class DataInput:
-    def __init__(self, selected_algorithm, matrix_size, start_point, end_point, matrix):
+    def __init__(self, selected_algorithm, matrix_size, start_point, end_point, matrix, min_value):
         self.matrix = matrix
         self.end_point = end_point
         self.start_point = start_point
         self.matrix_size = matrix_size
         self.selected_algorithm = selected_algorithm
+        self.min = min_value
 
 
 class StatsContainer:

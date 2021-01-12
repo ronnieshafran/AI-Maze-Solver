@@ -5,7 +5,7 @@ from inputChecks import check_input
 import numpy
 import Heuristics
 from math import log2, sqrt
-from Heuristics import manhattan_avg as h_func
+from Heuristics import euclidean_distance as h_func
 import os.path
 import time
 from sys import maxsize
@@ -20,9 +20,11 @@ def parse_input_file(file_path: str) -> DataInput:
         matrix = numpy.array([[float(num) for num in line.split(',')] for line in file.readlines()])
         min_value = maxsize
         for row in matrix:
-            row_min = min([i for i in row if i > 0])
-            min_value = min(min_value,row_min)
-        return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix)
+            row_list = [i for i in row if i > 0]
+            if len(row_list) > 0:
+                row_min = min([i for i in row if i > 0])
+                min_value = min(min_value,row_min)
+        return DataInput(selected_algorithm, matrix_size, start_point, end_point, matrix,min_value)
 
 
 def run_algorithm(input_data, time_limit, start_time=0.0):
@@ -46,8 +48,8 @@ def run_algorithm(input_data, time_limit, start_time=0.0):
         import IDAstar
         res = IDAstar.run(input_data, h_func, StatsContainer(), start_time, time_limit)
         print(res)
-    else:
-        raise Exception("something went wrong :(")
+    file_name = f'{input_data.selected_algorithm}_latest_test.txt'
+    with open(file_name,a)
 
 
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
@@ -63,6 +65,7 @@ def get_suggested_time_limit(data):
 
 
 if __name__ == '__main__':
+
     # ___uncomment this when switching to I/O_______
     # data = parse_input_file(input("Drag your file here:\n"))
     # suggested_limit = get_suggested_time_limit(data)
@@ -76,7 +79,7 @@ if __name__ == '__main__':
 
     # _____for testing_______
     path = os.path.dirname(__file__)
-    test_name = "medium_test.txt"
+    test_name = "spiral_test.txt"
     start_time = time.process_time()
     data = parse_input_file(os.path.join(path, test_name))
     legal, result = check_input(data)

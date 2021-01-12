@@ -41,7 +41,7 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
                 break
 
             forward_visited |= {current_forward_node.coordinates: current_forward_node}
-            forward_nodes_to_enqueue = get_children(current_forward_node, data.matrix, h_function, data.end_point)
+            forward_nodes_to_enqueue = get_children(current_forward_node, data.matrix, h_function, data.end_point,data.min)
 
             for node in forward_nodes_to_enqueue:
                 if node.coordinates not in forward_visited:
@@ -66,7 +66,7 @@ def run(data: DataInput, h_function) -> AlgorithmResult:
                 break
 
             backward_visited |= {current_backward_node.coordinates: current_backward_node}
-            backward_nodes_to_enqueue = get_children(current_backward_node, data.matrix, h_function, data.end_point)
+            backward_nodes_to_enqueue = get_children(current_backward_node, data.matrix, h_function, data.end_point,data.min)
 
             for node in backward_nodes_to_enqueue:
                 if node.coordinates not in backward_visited:
