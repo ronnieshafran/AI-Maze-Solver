@@ -71,11 +71,12 @@ def get_suggested_time_limit(data):
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
 if __name__ == '__main__':
 
-    algorithms = ['UCS', 'ASTAR', 'IDS', 'IDASTAR']
+    # algorithms = ['UCS', 'ASTAR', 'IDS', 'IDASTAR', 'BIASTAR']
+    algorithms = ['BIASTAR']
 
     wb = xlwt.Workbook()
     for algorithm in algorithms:
-        stats_sheet = wb.add_sheet(f'{algorithm}_stats')
+        stats_sheet = wb.add_sheet(f'{algorithm}_stats', cell_overwrite_ok=True)
         stats_sheet.write(0, 0, 'Problem')
         stats_sheet.write(0, 1, 'Heuristic Name')
         stats_sheet.write(0, 2, 'N')
@@ -137,28 +138,28 @@ if __name__ == '__main__':
                 stats_sheet.write(current_row, 8, f'{result.min_depth}')
                 stats_sheet.write(current_row, 9, f'{result.avg_depth}')
                 stats_sheet.write(current_row, 10, f'{result.max_depth}')
-        stats_sheet.write(22, 0, "Totals and Averages")
-        stats_sheet.write(22, 1, "Total Success:")
-        stats_sheet.write(22, 2, "Average N")
-        stats_sheet.write(22, 3, "Average H")
-        stats_sheet.write(22, 4, "Average Time")
-        stats_sheet.write(22, 5, "Average d/N")
-        stats_sheet.write(22, 6, "Average Min Depth")
-        stats_sheet.write(22, 7, "Average average Depth")
-        stats_sheet.write(22, 8, "Average Max Depth")
-        stats_sheet.write(22, 9, "Average EBF")
+        stats_sheet.write(52, 0, "Totals and Averages")
+        stats_sheet.write(52, 1, "Total Success:")
+        stats_sheet.write(52, 2, "Average N")
+        stats_sheet.write(52, 3, "Average H")
+        stats_sheet.write(52, 4, "Average Time")
+        stats_sheet.write(52, 5, "Average d/N")
+        stats_sheet.write(52, 6, "Average Min Depth")
+        stats_sheet.write(52, 7, "Average average Depth")
+        stats_sheet.write(52, 8, "Average Max Depth")
+        stats_sheet.write(52, 9, "Average EBF")
 
         if total_success == 0:
             total_h = total_nodes = total_penetration = total_time = total_ebf = total_mindepth = total_maxdepth = total_avgdepth = 0
             total_success = 1
 
-        stats_sheet.write(23, 1, total_success)
-        stats_sheet.write(23, 2, total_nodes / total_success)
-        stats_sheet.write(23, 3, total_h / total_success)
-        stats_sheet.write(23, 4, total_time / total_success)
-        stats_sheet.write(23, 5, total_penetration / total_success)
-        stats_sheet.write(23, 6, total_mindepth / total_success)
-        stats_sheet.write(23, 7, total_avgdepth / total_success)
-        stats_sheet.write(23, 8, total_maxdepth / total_success)
-        stats_sheet.write(23, 9, total_ebf / total_success)
-        wb.save('statistics.xls')
+        stats_sheet.write(53, 1, total_success)
+        stats_sheet.write(53, 2, total_nodes / total_success)
+        stats_sheet.write(53, 3, total_h / total_success)
+        stats_sheet.write(53, 4, total_time / total_success)
+        stats_sheet.write(53, 5, total_penetration / total_success)
+        stats_sheet.write(53, 6, total_mindepth / total_success)
+        stats_sheet.write(53, 7, total_avgdepth / total_success)
+        stats_sheet.write(53, 8, total_maxdepth / total_success)
+        stats_sheet.write(53, 9, total_ebf / total_success)
+        wb.save(f'{algorithm}_statistics.xls')
