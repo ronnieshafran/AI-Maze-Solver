@@ -72,7 +72,7 @@ def get_suggested_time_limit(data):
 if __name__ == '__main__':
 
     # algorithms = ['UCS', 'ASTAR', 'IDS', 'IDASTAR', 'BIASTAR']
-    algorithms = ['BIASTAR']
+    algorithms = ['BIASTAR', 'IDASTAR']
 
     wb = xlwt.Workbook()
     for algorithm in algorithms:
