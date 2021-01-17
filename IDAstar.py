@@ -14,7 +14,8 @@ def run(data: DataInput, h_function, overall_stats: StatsContainer, start_time, 
     f_limit = h_function(root.coordinates, data.end_point, data.min)
     while 1:
         old_f_limit = f_limit
-        goal, f_limit, overall_stats, out_of_time = dfs_contour(data, root, f_limit, h_function, overall_stats, root.heuristic_value, actual_start_time, run_time)
+        goal, f_limit, overall_stats, out_of_time = dfs_contour(data, root, f_limit, h_function, overall_stats, root.heuristic_value,
+                                                                actual_start_time, run_time)
         # failed to adhere to run time limitation
         if out_of_time or time.process_time() - actual_start_time >= run_time:
             overall_stats.end_time = time.process_time()
@@ -31,7 +32,7 @@ def run(data: DataInput, h_function, overall_stats: StatsContainer, start_time, 
                 result.path_cost = goal.g_cost_of_path
                 result.successful = True
             return result
-        f_limit = max(old_f_limit+data.min, f_limit)
+        f_limit = max(old_f_limit + data.min, f_limit)
 
 
 def dfs_contour(data: DataInput, node, f_limit, h_function, stats: StatsContainer, const_fix, start_time, runtime):
@@ -48,7 +49,7 @@ def dfs_contour(data: DataInput, node, f_limit, h_function, stats: StatsContaine
     if node.coordinates == data.end_point:
         return node, f_limit, stats, False
 
-    successors = get_children(node, data.matrix, h_function, data.end_point,data.min)
+    successors = get_children(node, data.matrix, h_function, data.end_point, data.min)
     if len(successors) != 0:
         stats.total_nodes_expanded += 1
         stats.total_h += node.heuristic_value
@@ -60,7 +61,7 @@ def dfs_contour(data: DataInput, node, f_limit, h_function, stats: StatsContaine
             stats.max_depth = successor.depth
         if successor.coordinates in node.list_of_cords:
             continue
-        solution, new_f, stats = dfs_contour(data, successor, f_limit, h_function, stats, const_fix)
+        solution, new_f, stats, is_time_out = dfs_contour(data, successor, f_limit, h_function, stats, const_fix, start_time, runtime)
         if solution is not None:
             return solution, f_limit, stats, False
         next_f = min(next_f, new_f)
