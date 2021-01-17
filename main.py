@@ -5,7 +5,7 @@ from inputChecks import check_input
 import numpy
 import Heuristics
 from math import log2, sqrt
-from Heuristics import euclidean_distance as h_func
+from Heuristics import chebyshev_distance as h_func
 import os.path
 import xlwt
 import time
@@ -71,9 +71,7 @@ def get_suggested_time_limit(data):
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
 if __name__ == '__main__':
 
-    # algorithms = ['UCS', 'ASTAR', 'IDS', 'IDASTAR', 'BIASTAR']
-    algorithms = ['BIASTAR']
-
+    algorithms = ['UCS', 'ASTAR', 'IDS', 'IDASTAR', 'BIASTAR']
     wb = xlwt.Workbook()
     for algorithm in algorithms:
         stats_sheet = wb.add_sheet(f'{algorithm}_stats', cell_overwrite_ok=True)
@@ -114,7 +112,7 @@ if __name__ == '__main__':
                         file.write(result.get_results())
                 result.problem = test_name
                 if data.selected_algorithm == "ASTAR" or data.selected_algorithm == "IDASTAR" or data.selected_algorithm == "BIASTAR":
-                    result.h_function = "chebyshev"
+                    result.h_function = "normalized euclidean"
                 success = 'Y' if result.successful else 'N'
                 if result.successful:
                     total_success += 1
@@ -162,4 +160,5 @@ if __name__ == '__main__':
         stats_sheet.write(53, 7, total_avgdepth / total_success)
         stats_sheet.write(53, 8, total_maxdepth / total_success)
         stats_sheet.write(53, 9, total_ebf / total_success)
-        wb.save(f'{algorithm}_statistics.xls')
+        wb.save('second_heuristic_statistics.xls')
+    wb.save('second_heuristic_statistics.xls')
