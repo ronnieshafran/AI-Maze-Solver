@@ -2,7 +2,7 @@ from numpy import random
 
 
 def generate_random_matrix(size):
-    return random.uniform(0, 100, (size, size))
+    return random.uniform(1, 100, (size, size))
 
 
 def get_rows_and_cols(size):

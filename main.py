@@ -5,7 +5,7 @@ from inputChecks import check_input
 import numpy
 import Heuristics
 from math import log2, sqrt
-from Heuristics import chebyshev_distance as h_func
+from Heuristics import euclidean_distance as h_func
 import os.path
 import xlwt
 import time
@@ -71,10 +71,12 @@ def get_suggested_time_limit(data):
 # TODO: Replace list of cords to ancestors or something intuitive after final merge, change penetration to d/N
 if __name__ == '__main__':
 
-    algorithms = ['UCS', 'ASTAR', 'IDS', 'IDASTAR', 'BIASTAR']
+    algorithms = ['BIASTAR','UCS', 'ASTAR', 'IDS', 'IDASTAR']
+    heuristic_name = "Chebyshev"
+    local_tests = ['frame_of_1s_test.txt','spiral_test.txt', 'large_test.txt', 'medium_test.txt', 'test_200_complex.txt']
     wb = xlwt.Workbook()
     for algorithm in algorithms:
-        stats_sheet = wb.add_sheet(f'{algorithm}_stats', cell_overwrite_ok=True)
+        stats_sheet = wb.add_sheet(f'{algorithm}_stats')
         stats_sheet.write(0, 0, 'Problem')
         stats_sheet.write(0, 1, 'Heuristic Name')
         stats_sheet.write(0, 2, 'N')
@@ -87,10 +89,12 @@ if __name__ == '__main__':
         stats_sheet.write(0, 9, 'Avg Depth')
         stats_sheet.write(0, 10, 'Max Depth')
         total_success = total_h = total_nodes = total_penetration = total_time = total_ebf = total_mindepth = total_maxdepth = total_avgdepth = 0
-
+        i = 0
         path = os.path.dirname(__file__)
-        for i in range(50):
-            test_name = f"test_{i}.txt"
+        # for i in range(50):
+        #     test_name = f"test_{i}.txt"
+        for test_name in local_tests:
+            i += 1
             data = parse_input_file(os.path.join(path, test_name))
             data.selected_algorithm = algorithm
             legal, result = check_input(data)
@@ -107,12 +111,13 @@ if __name__ == '__main__':
                 current_row = i + 1
                 result = run_algorithm(data, 0, 0)
                 if result.successful:
-                    result_file = f"{algorithm}_test_{i}_results.txt"
+                    #result_file = f"{algorithm}_test_{i}_results.txt"
+                    result_file = f'{algorithm}_{test_name}_results.txt'
                     with open(result_file, "w") as file:
                         file.write(result.get_results())
                 result.problem = test_name
                 if data.selected_algorithm == "ASTAR" or data.selected_algorithm == "IDASTAR" or data.selected_algorithm == "BIASTAR":
-                    result.h_function = "normalized euclidean"
+                    result.h_function = heuristic_name
                 success = 'Y' if result.successful else 'N'
                 if result.successful:
                     total_success += 1
@@ -160,5 +165,5 @@ if __name__ == '__main__':
         stats_sheet.write(53, 7, total_avgdepth / total_success)
         stats_sheet.write(53, 8, total_maxdepth / total_success)
         stats_sheet.write(53, 9, total_ebf / total_success)
-        wb.save('second_heuristic_statistics.xls')
-    wb.save('second_heuristic_statistics.xls')
+        # wb.save('euc_heuristic_statistics_updated.xls')
+    wb.save(f'local_tests_{heuristic_name}_statistics_updated.xls')

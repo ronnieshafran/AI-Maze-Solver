@@ -12,6 +12,7 @@ def run(data: DataInput, h_function, start_time, total_runtime=0) -> AlgorithmRe
     # in both forward and backward iterations. Dictionaries are called: forward_visited, backward_open_queue.
     # ------- variables used to calculate stats ------- #
     total_runtime = total_runtime if total_runtime > 0 else round(5 * log2(data.matrix_size), 2)
+    start_time = time.process_time()
     out_of_time = False
     max_depth = 0
     min_depth = maxsize
