@@ -5,7 +5,7 @@ from inputChecks import check_input
 import numpy
 import Heuristics
 from math import log2, sqrt
-from Heuristics import euclidean_distance as h_func
+from Heuristics import chebyshev_distance as h_func
 import os.path
 import xlwt
 import time
@@ -72,7 +72,7 @@ def get_suggested_time_limit(data):
 if __name__ == '__main__':
 
     algorithms = ['BIASTAR','UCS', 'ASTAR', 'IDS', 'IDASTAR']
-    heuristic_name = "Chebyshev"
+    heuristic_name = "Chebyshev_real"
     local_tests = ['frame_of_1s_test.txt','spiral_test.txt', 'large_test.txt', 'medium_test.txt', 'test_200_complex.txt']
     wb = xlwt.Workbook()
     for algorithm in algorithms:
