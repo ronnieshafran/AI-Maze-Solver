@@ -13,4 +13,8 @@ Output:
 A series of statistics defined in the AlgorithmResult data structure that is returned by each algorithm's
 run method. Note that some stats are only applicable for informed searches.
 
+You can use the example test to run the script, or generate some random tests of your own 
+using our tests generator. For testing purposes, you can uncomment the appropriate section
+(that is currently commented out) in main.py. 
+
 
