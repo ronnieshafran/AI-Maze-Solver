@@ -1,5 +1,3 @@
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from dataStructures import DataInput, Point, StatsContainer
 from inputChecks import check_input
 import numpy
@@ -72,7 +70,7 @@ def get_suggested_time_limit(data):
 
 if __name__ == '__main__':
 
-    # ___uncomment this when switching to I/O___ #
+    # ___main for user I/O ___ #
     data = parse_input_file(input("Drag your file here:\n"))
     suggested_limit = get_suggested_time_limit(data)
     user_wants_to_set_new_time = input(
@@ -83,9 +81,9 @@ if __name__ == '__main__':
     else:
         runtime_limit = suggested_limit
 
-    # _____for testing____ #
+    # _____uncomment this for testing____ #
     # path = os.path.dirname(__file__)
-    # test_name = "wall_with_gap_test.txt"
+    # test_name = "example_test.txt"
     # data = parse_input_file(os.path.join(path, test_name))
     # runtime_limit = 0
 
